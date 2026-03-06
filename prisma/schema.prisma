@@ -159,6 +159,8 @@ model University {
   address  String?
   city     String?
   province String?
+  logoUrl  String?
+  status   String  @default("ACTIVE")
 
   workspaceId  String
   workspace    Workspace     @relation(fields: [workspaceId], references: [id])

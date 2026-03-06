@@ -35,6 +35,38 @@ This skill documents the specific implementation patterns and best practices for
 - **Style**: Accessible components built with Radix UI and Tailwind CSS.
 - **Customization**: Components should be modified directly in the `ui` folder if needed for project-specific styling.
 - **Standard**: Use `asChild` for semantic HTML (e.g., when a `Button` is also a `Link`).
+- **Form Pattern**: Preference for the `Field` pattern over the older `Form` components. Use `src/components/ui/field.tsx` components.
+
+### 📝 Form Implementation (Field Pattern)
+
+The project uses a modern "Field" pattern for forms, integrating `react-hook-form` with custom `Field` components.
+
+**Key Components**:
+- `Field`: The main wrapper for a form field.
+- `FieldLabel`: The label for the field.
+- `FieldControl`: (Implicitly handled by `react-hook-form`'s `Controller` or direct input).
+- `FieldDescription`: Optional helper text.
+- `FieldError`: Displays validation errors.
+
+**Example Usage**:
+```tsx
+import { useForm, Controller } from "react-hook-form"
+import { Field, FieldLabel, FieldError } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+
+// Inside component
+<Controller
+    control={form.control}
+    name="username"
+    render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>Username</FieldLabel>
+            <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+            <FieldError errors={[fieldState.error]} />
+        </Field>
+    )}
+/>
+```
 
 ## 🔄 State Management (TanStack Query)
 
@@ -64,4 +96,37 @@ This skill documents the specific implementation patterns and best practices for
   - **Server-side**: Use `prisma.model.createMany({ data: [...], skipDuplicates: true })` for optimal performance with large datasets (10,000+ rows).
 - **Mapping**: Create a clear mapping between Excel headers and Prisma fields to ensure data integrity.
 - **Components**: Use `ImportDialog` for a consistent import experience across different modules.
+
+## 📝 React Hook Form Patterns
+
+To ensure strict type safety and avoid common TypeScript errors with `useForm` and `zodResolver`:
+
+1.  **Define Schema & Types**:
+    ```typescript
+    const schema = z.object({
+        name: z.string().min(1, "Required"),
+        email: z.string().email().optional().or(z.literal("")),
+    })
+    type FormValues = z.infer<typeof schema>
+    ```
+
+2.  **Initialize `useForm` with Generics**:
+    Always provide the inferred type to `useForm` to ensure `defaultValues` and `onSubmit` are strictly typed.
+    ```typescript
+    const form = useForm<FormValues>({
+        resolver: zodResolver(schema),
+        defaultValues: { ... }
+    })
+    ```
+
+3.  **Strict Submit Handler**:
+    Explicitly type the `onSubmit` function to match `SubmitHandler<FormValues>`.
+    ```typescript
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
+        // data is strictly FormValues
+    }
+    ```
+
+4.  **Handling Optionals**:
+    For optional fields that are represented as empty strings in HTML inputs, use `.optional().or(z.literal(""))` or `.default("")` in Zod to avoid `undefined` vs `string` type mismatches.
 
