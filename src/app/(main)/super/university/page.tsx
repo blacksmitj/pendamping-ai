@@ -19,6 +19,7 @@ import { getWorkspaces } from "@/actions/workspaces"
 import { UniversityDialog } from "./university-dialog"
 import { toast } from "sonner"
 import Image from "next/image"
+import { getStorageUrl } from "@/lib/storage-helper"
 
 export default function SuperUniversitasPage() {
     const [universities, setUniversities] = React.useState<any[]>([])
@@ -70,7 +71,7 @@ export default function SuperUniversitasPage() {
                 <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-lg bg-slate-50 border flex items-center justify-center overflow-hidden flex-shrink-0">
                         {item.logoUrl ? (
-                            <Image src={item.logoUrl} alt={item.name} width={40} height={40} className="object-contain" />
+                            <Image src={getStorageUrl(item.logoUrl)} alt={item.name} width={40} height={40} className="object-contain" />
                         ) : (
                             <Building2 className="h-5 w-5 text-slate-400" />
                         )}

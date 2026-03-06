@@ -26,7 +26,9 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Building2, Upload, X, Loader2 } from "lucide-react"
-import { createUniversity, updateUniversity, uploadUniversityLogo } from "@/actions/university"
+import { createUniversity, updateUniversity } from "@/actions/university"
+import { uploadFileToMinio } from "@/lib/storage-client"
+import { getStorageUrl } from "@/lib/storage-helper"
 import { toast } from "sonner"
 import Image from "next/image"
 
@@ -59,7 +61,7 @@ export function UniversityDialog({
     onSuccess
 }: UniversityDialogProps) {
     const [isUploading, setIsUploading] = React.useState(false)
-    const [logoPreview, setLogoPreview] = React.useState<string | null>(university?.logoUrl || null)
+    const [logoPreview, setLogoPreview] = React.useState<string | null>(university?.logoUrl ? getStorageUrl(university.logoUrl) : null)
     const [submitting, setSubmitting] = React.useState(false)
 
     const form = useForm<UniversityFormValues>({
@@ -88,7 +90,7 @@ export function UniversityDialog({
                 workspaceId: university?.workspaceId || (workspaces.length > 0 ? workspaces[0].id : ""),
                 status: university?.status || "ACTIVE",
             })
-            setLogoPreview(university?.logoUrl || null)
+            setLogoPreview(university?.logoUrl ? getStorageUrl(university.logoUrl) : null)
         }
     }, [open, university, workspaces, form])
 
@@ -97,20 +99,13 @@ export function UniversityDialog({
         if (!file) return
 
         setIsUploading(true)
-        const formData = new FormData()
-        formData.append("file", file)
-
         try {
-            const result = await uploadUniversityLogo(formData)
-            if (result.success && result.url) {
-                form.setValue("logoUrl", result.url)
-                setLogoPreview(result.url)
-                toast.success("Logo uploaded successfully")
-            } else {
-                toast.error(result.error || "Upload failed")
-            }
-        } catch (error) {
-            toast.error("An error occurred during upload")
+            const path = await uploadFileToMinio(file, "photo")
+            form.setValue("logoUrl", path)
+            setLogoPreview(getStorageUrl(path))
+            toast.success("Logo uploaded successfully")
+        } catch (error: any) {
+            toast.error(error.message || "An error occurred during upload")
         } finally {
             setIsUploading(false)
         }

@@ -13,13 +13,26 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserNav } from "@/components/user-nav"
 
-export default function MainLayout({
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import { redirect } from "next/navigation"
+import { PendingGuard } from "@/components/pending-guard"
+
+export default async function MainLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    if (!session) {
+        redirect("/login")
+    }
+
     return (
         <SidebarProvider>
             <AppSidebar />
@@ -41,14 +54,13 @@ export default function MainLayout({
                         </Breadcrumb>
                     </div>
                     <div className="flex items-center gap-4">
-                        <Avatar className="h-8 w-8">
-                            <AvatarImage src="https://github.com/shadcn.png" />
-                            <AvatarFallback>PA</AvatarFallback>
-                        </Avatar>
+                        <UserNav />
                     </div>
                 </header>
                 <main className="flex-1 p-6 md:px-8 max-w-7xl mx-auto w-full">
-                    {children}
+                    <PendingGuard>
+                        {children}
+                    </PendingGuard>
                 </main>
             </SidebarInset>
         </SidebarProvider>

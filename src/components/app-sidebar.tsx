@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/sidebar"
 import { useRole } from "@/components/providers/role-provider"
 import { RoleSwitcher } from "@/components/role-switcher"
+import { useSession } from "@/lib/auth-client"
 
 // Define menus for each role
 const menus = {
@@ -130,11 +131,32 @@ const menus = {
     ],
 }
 
+type MenuItem = {
+    title: string
+    url: string
+    icon: any // lucide icon
+}
+
+type MenuGroup = {
+    title: string
+    items: MenuItem[]
+}
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const pathname = usePathname()
     const { role } = useRole()
+    const { data: session } = useSession()
 
-    const navData = menus[role] || menus.mentor
+    const isPending = (session?.user as any)?.status === "PENDING"
+
+    let navData: MenuGroup[] = (menus as any)[role] || menus.mentor
+
+    if (isPending) {
+        navData = navData.map((group) => ({
+            ...group,
+            items: group.items.filter((item) => item.title === "Account")
+        })).filter((group) => group.items.length > 0)
+    }
 
     return (
         <Sidebar {...props}>

@@ -14,38 +14,50 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
-const superUsers = [
-    {
-        id: "SU-001",
-        name: "Budi Pratama",
-        email: "budi.admin@ui.ac.id",
-        university: "Universitas Indonesia",
-        role: "Admin Univ",
-        status: "Pending",
-        registeredAt: "2026-03-05",
-    },
-    {
-        id: "SU-002",
-        name: "Siska Amelia",
-        email: "siska.pengawas@gov.id",
-        university: "Pusat",
-        role: "Pengawas",
-        status: "Aktif",
-        registeredAt: "2026-03-01",
-    },
-    {
-        id: "SU-003",
-        name: "Hendi Suhendi",
-        email: "hendi@itb.ac.id",
-        university: "ITB",
-        role: "Admin Univ",
-        status: "Pending",
-        registeredAt: "2026-03-04",
-    },
-]
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { getSuperAdminUsers, approveUser, rejectUser, suspendUser } from "@/actions/users"
+import { toast } from "sonner"
 
 export default function SuperUsersPage() {
+    const queryClient = useQueryClient();
+
+    const { data: superUsers, isLoading } = useQuery({
+        queryKey: ["super-users"],
+        queryFn: async () => await getSuperAdminUsers(),
+    });
+
+    const approveMutation = useMutation({
+        mutationFn: async (id: string) => await approveUser(id),
+        onSuccess: () => {
+            toast.success("User berhasil disetujui");
+            queryClient.invalidateQueries({ queryKey: ["super-users"] });
+        },
+        onError: (error: any) => {
+            toast.error(error.message || "Gagal menyetujui user");
+        }
+    });
+
+    const rejectMutation = useMutation({
+        mutationFn: async (id: string) => await rejectUser(id),
+        onSuccess: () => {
+            toast.success("User berhasil ditolak");
+            queryClient.invalidateQueries({ queryKey: ["super-users"] });
+        },
+        onError: (error: any) => {
+            toast.error(error.message || "Gagal menolak user");
+        }
+    });
+
+    const suspendMutation = useMutation({
+        mutationFn: async (id: string) => await suspendUser(id),
+        onSuccess: () => {
+            toast.success("User berhasil dinonaktifkan");
+            queryClient.invalidateQueries({ queryKey: ["super-users"] });
+        },
+        onError: (error: any) => {
+            toast.error(error.message || "Gagal menonaktifkan user");
+        }
+    });
     const columns: any[] = [
         {
             header: "User",
@@ -87,11 +99,23 @@ export default function SuperUsersPage() {
                 <div className="flex items-center gap-2">
                     {item.status === "Pending" && (
                         <>
-                            <Button size="sm" variant="outline" className="h-8 border-emerald-200 text-emerald-600 hover:bg-emerald-50">
+                            <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="h-8 border-emerald-200 text-emerald-600 hover:bg-emerald-50"
+                                onClick={() => approveMutation.mutate(item.id)}
+                                disabled={approveMutation.isPending}
+                            >
                                 <UserCheck className="h-3.5 w-3.5 mr-1" />
                                 Setujui
                             </Button>
-                            <Button size="sm" variant="outline" className="h-8 border-rose-200 text-rose-600 hover:bg-rose-50">
+                            <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="h-8 border-rose-200 text-rose-600 hover:bg-rose-50"
+                                onClick={() => rejectMutation.mutate(item.id)}
+                                disabled={rejectMutation.isPending}
+                            >
                                 <UserX className="h-3.5 w-3.5 mr-1" />
                                 Tolak
                             </Button>
@@ -107,7 +131,15 @@ export default function SuperUsersPage() {
                             <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                             <DropdownMenuItem>Lihat Profil</DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-rose-600">Nonaktifkan</DropdownMenuItem>
+                            {item.originalStatus !== "SUSPENDED" && item.originalStatus !== "REJECTED" && (
+                                <DropdownMenuItem 
+                                    className="text-rose-600"
+                                    onClick={() => suspendMutation.mutate(item.id)}
+                                    disabled={suspendMutation.isPending}
+                                >
+                                    Nonaktifkan
+                                </DropdownMenuItem>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
@@ -124,8 +156,9 @@ export default function SuperUsersPage() {
 
             <DataTable
                 columns={columns}
-                data={superUsers}
+                data={superUsers || []}
                 searchPlaceholder="Cari nama, email, atau instansi..."
+                isLoading={isLoading}
             />
         </div>
     )

@@ -11,6 +11,7 @@ export const metadata = {
 }
 
 import { QueryProvider } from "@/components/providers/query-provider"
+import { Toaster } from "sonner"
 
 export default function RootLayout({
   children,
@@ -22,7 +23,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <QueryProvider>
           <RoleProvider>
-            <TooltipProvider>{children}</TooltipProvider>
+            <TooltipProvider>
+              {children}
+              <Toaster richColors position="top-right" />
+            </TooltipProvider>
           </RoleProvider>
         </QueryProvider>
       </body>

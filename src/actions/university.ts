@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { BUCKETS, uploadFile } from "@/lib/minio";
+import { FOLDERS, uploadFile } from "@/lib/minio";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -126,25 +126,3 @@ export async function deleteUniversity(id: string) {
     }
 }
 
-/**
- * Server action to upload university logo to Minio
- */
-export async function uploadUniversityLogo(formData: FormData) {
-    try {
-        const file = formData.get("file") as File;
-        if (!file) {
-            return { success: false, error: "No file provided" };
-        }
-
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const timestamp = Date.now();
-        const fileName = `logos/${timestamp}-${file.name.replace(/\s+/g, "_")}`;
-        
-        const url = await uploadFile(BUCKETS.UNIVERSITIES, fileName, buffer, file.type);
-        
-        return { success: true, url };
-    } catch (error) {
-        console.error("Failed to upload logo:", error);
-        return { success: false, error: "Upload failed" };
-    }
-}

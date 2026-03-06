@@ -14,6 +14,7 @@ import {
 import { Building2, MapPin, CheckCircle, Users, Loader2 } from "lucide-react"
 import { getMyUniversity } from "@/actions/university"
 import Image from "next/image"
+import { getStorageUrl } from "@/lib/storage-helper"
 
 export default function UniversitasPage() {
     const [university, setUniversity] = React.useState<any>(null)
@@ -61,7 +62,7 @@ export default function UniversitasPage() {
                         <div className="h-14 w-14 rounded-lg bg-indigo-50 flex items-center justify-center border border-indigo-100 overflow-hidden relative">
                             {university.logoUrl ? (
                                 <Image 
-                                    src={university.logoUrl} 
+                                    src={getStorageUrl(university.logoUrl)} 
                                     alt={university.name} 
                                     fill 
                                     className="object-contain p-2" 
