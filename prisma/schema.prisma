@@ -1,0 +1,407 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ========================
+// BETTER AUTH CORE TABLES
+// ========================
+model User {
+  id            String     @id @default(cuid())
+  name          String
+  email         String     @unique
+  emailVerified Boolean    @default(false)
+  image         String?
+  role          UserRole   @default(PENDAMPING)
+  status        UserStatus @default(PENDING)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // === Relations ===
+  universityId    String?
+  university      University?             @relation(fields: [universityId], references: [id])
+  workspaces      UserWorkspace[]
+  logbooks        Logbook[]
+  assignments     ParticipantAssignment[]
+  logbookReviews  LogbookReview[]
+  outputReviews   OutputReview[]
+  supervisorNotes SupervisorNote[]
+
+  // Better Auth managed
+  sessions Session[]
+  accounts Account[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  activeWorkspaceId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// ========================
+// ENUMS
+// ========================
+enum UserRole {
+  PENDAMPING
+  ADMIN_UNIV
+  PENGAWAS_UNIV
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
+}
+
+enum WorkspaceStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum DeliveryMethod {
+  FACE_TO_FACE
+  ONLINE
+}
+
+enum MeetingType {
+  INDIVIDUAL
+  GROUP
+}
+
+enum ReviewStatus {
+  DRAFT
+  SUBMITTED
+  REVISION
+  APPROVED
+  REJECTED
+}
+
+// ========================
+// WORKSPACE (Multi-Event)
+// ========================
+model Workspace {
+  id          String          @id @default(cuid())
+  name        String
+  startDate   DateTime
+  endDate     DateTime
+  status      WorkspaceStatus @default(ACTIVE)
+  description String?
+
+  universities University[]
+  participants Participant[]
+  users        UserWorkspace[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserWorkspace {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, workspaceId])
+}
+
+// ========================
+// UNIVERSITY
+// ========================
+model University {
+  id       String  @id @default(cuid())
+  name     String
+  code     String  @unique
+  address  String?
+  city     String?
+  province String?
+
+  workspaceId  String
+  workspace    Workspace     @relation(fields: [workspaceId], references: [id])
+  users        User[]
+  participants Participant[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ========================
+// PARTICIPANT
+// ========================
+model Participant {
+  id    String @id @default(cuid())
+  idTkm String @unique
+
+  // --- Imported from Excel ---
+  // Personal Info
+  fullName         String
+  registrantNik    String?
+  birthPlace       String?
+  lastEducation    String?
+  currentActivity  String?
+  isDisabled       Boolean   @default(false)
+  disabilityType   String?
+  registrationDate DateTime?
+
+  // Contact
+  whatsapp       String?
+  socialPlatform String?
+  socialAccount  String?
+  socialLink     String?
+
+  // Emergency Contact
+  relativeName1   String?
+  relativePhone1  String?
+  relativeStatus1 String?
+  relativeName2   String?
+  relativePhone2  String?
+  relativeStatus2 String?
+
+  // Business Profile
+  businessName          String?
+  businessSector        String?
+  businessType          String?
+  businessDesc          String?
+  mainProduct           String?
+  businessLocation      String?
+  locationOwnership     String?
+  sameAsResidence       Boolean? @default(false)
+  businessAddress       String?
+  businessProvince      String?
+  businessCity          String?
+  businessDistrict      String?
+  businessSubDistrict   String?
+  businessPostalCode    String?
+  salesChannel          String?
+  marketingArea         String?
+  marketingCountry      String?
+  businessPartner       String?
+  partnerCount          Int?
+  revenuePerPeriod      Decimal? @db.Decimal(18, 2)
+  profitPerPeriod       Decimal? @db.Decimal(18, 2)
+  productCountPerPeriod Float?
+  productUnitPerPeriod  String?
+
+  // Uploaded Documents (URLs from file storage)
+  ktpUrl                String?
+  familyCardUrl         String?
+  selfPhotoUrl          String?
+  assistanceLetterUrl   String?
+  commitmentLetterUrl   String?
+  businessProfileDocUrl String?
+  bmcStrategyDocUrl     String?
+  rabDocUrl             String?
+  developmentPlanUrl    String?
+  businessVideoUrl      String?
+  businessPhotoUrl      String?
+  financialRecordUrl    String?
+
+  // --- Filled by Pendamping ---
+  communicationStatus    String?
+  fundDisbursementStatus String?
+  presenceStatus         String?
+  isWillingToBeAssisted  Boolean?
+  unwillingReason        String?
+  status                 String   @default("active") // active / drop
+  dropReason             String?
+  googleMapsUrl          String?
+  bmcUrl                 String?
+  actionPlanUrl          String?
+
+  // === Relations ===
+  workspaceId         String
+  workspace           Workspace               @relation(fields: [workspaceId], references: [id])
+  universityId        String?
+  university          University?             @relation(fields: [universityId], references: [id])
+  assignments         ParticipantAssignment[]
+  logbookParticipants LogbookParticipant[]
+  outputs             Output[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ParticipantAssignment {
+  id            String      @id @default(cuid())
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  pendampingId  String
+  pendamping    User        @relation(fields: [pendampingId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now())
+
+  @@unique([participantId, pendampingId])
+}
+
+// ========================
+// LOGBOOK
+// ========================
+model Logbook {
+  id                String         @id @default(cuid())
+  date              DateTime
+  deliveryMethod    DeliveryMethod
+  meetingType       MeetingType
+  visitType         String
+  startTime         DateTime
+  endTime           DateTime
+  jpl               Int            @default(0)
+  material          String
+  summary           String
+  obstacle          String
+  solution          String
+  totalExpense      Decimal        @default(0) @db.Decimal(18, 2)
+  documentationUrls String[]
+  expenseProofUrl   String?
+  noExpenseReason   String?
+  reviewStatus      ReviewStatus   @default(DRAFT)
+
+  pendampingId        String
+  pendamping          User                 @relation(fields: [pendampingId], references: [id])
+  logbookParticipants LogbookParticipant[]
+  reviews             LogbookReview[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LogbookParticipant {
+  id            String      @id @default(cuid())
+  logbookId     String
+  logbook       Logbook     @relation(fields: [logbookId], references: [id], onDelete: Cascade)
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  @@unique([logbookId, participantId])
+}
+
+model LogbookReview {
+  id         String       @id @default(cuid())
+  logbookId  String
+  logbook    Logbook      @relation(fields: [logbookId], references: [id], onDelete: Cascade)
+  reviewerId String
+  reviewer   User         @relation(fields: [reviewerId], references: [id])
+  action     ReviewStatus
+  note       String?
+
+  createdAt DateTime @default(now())
+}
+
+// ========================
+// OUTPUT (Capaian Output)
+// ========================
+model Output {
+  id                            String       @id @default(cuid())
+  participantId                 String
+  participant                   Participant  @relation(fields: [participantId], references: [id])
+  reportMonth                   DateTime
+  revenue                       Decimal      @db.Decimal(18, 2)
+  salesVolume                   Float
+  salesVolumeUnit               String
+  productionCapacity            Float
+  productionCapacityUnit        String
+  workerConfirmation            String
+  incomeProofUrl                String
+  cashflowProofUrl              String
+  obstacle                      String
+  marketingArea                 String
+  businessCondition             String
+  lpjUrl                        String
+  hasCashflowBookkeeping        Boolean
+  hasIncomeStatementBookkeeping Boolean
+  reviewStatus                  ReviewStatus @default(DRAFT)
+
+  employees Employee[]
+  reviews   OutputReview[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Employee {
+  id               String  @id @default(cuid())
+  outputId         String
+  output           Output  @relation(fields: [outputId], references: [id], onDelete: Cascade)
+  nik              String
+  name             String
+  ktpUrl           String
+  employmentStatus String
+  hasBpjs          Boolean
+  isDisabled       Boolean
+  disabilityType   String?
+  gender           String
+  bpjsType         String?
+  bpjsNumber       String?
+  bpjsCardUrl      String?
+  role             String
+  salarySlipUrl    String
+}
+
+model OutputReview {
+  id         String       @id @default(cuid())
+  outputId   String
+  output     Output       @relation(fields: [outputId], references: [id], onDelete: Cascade)
+  reviewerId String
+  reviewer   User         @relation(fields: [reviewerId], references: [id])
+  action     ReviewStatus
+  note       String?
+
+  createdAt DateTime @default(now())
+}
+
+// ========================
+// SUPERVISOR NOTES
+// ========================
+model SupervisorNote {
+  id           String @id @default(cuid())
+  supervisorId String
+  supervisor   User   @relation(fields: [supervisorId], references: [id])
+  targetType   String // "LOGBOOK" | "OUTPUT"
+  targetId     String
+  message      String
+
+  createdAt DateTime @default(now())
+}
