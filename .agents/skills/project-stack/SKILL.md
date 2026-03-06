@@ -55,3 +55,13 @@ This skill documents the specific implementation patterns and best practices for
   - Always verify session and roles at the start of the action.
   - Return clearly defined objects or throw errors for unauthorized access.
 - **Revalidation**: Use `revalidatePath` after every mutation to keep the server cache fresh.
+    
+## 📊 Excel Data Import (SheetJS)
+
+- **Library**: `xlsx` (SheetJS)
+- **Implementation Pattern**:
+  - **Client-side**: Use `xlsx` to parse the file into a JSON array to provide feedback and partial validation before sending to the server.
+  - **Server-side**: Use `prisma.model.createMany({ data: [...], skipDuplicates: true })` for optimal performance with large datasets (10,000+ rows).
+- **Mapping**: Create a clear mapping between Excel headers and Prisma fields to ensure data integrity.
+- **Components**: Use `ImportDialog` for a consistent import experience across different modules.
+

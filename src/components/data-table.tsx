@@ -21,6 +21,7 @@ interface DataTableProps<TData> {
     currentPage?: number
     itemsPerPage?: number
     onRowClick?: (item: TData) => void
+    isLoading?: boolean
 }
 
 export function DataTable<TData>({
@@ -32,6 +33,7 @@ export function DataTable<TData>({
     currentPage = 1,
     itemsPerPage = 10,
     onRowClick,
+    isLoading,
 }: DataTableProps<TData>) {
     return (
         <div className="flex flex-col gap-4 bg-background">
@@ -55,7 +57,13 @@ export function DataTable<TData>({
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {data.length > 0 ? (
+                        {isLoading ? (
+                            <TableRow>
+                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                    Memuat data...
+                                </TableCell>
+                            </TableRow>
+                        ) : data.length > 0 ? (
                             data.map((item, rowIndex) => (
                                 <TableRow
                                     key={rowIndex}

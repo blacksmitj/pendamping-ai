@@ -32,8 +32,29 @@ export async function createWorkspace(data: {
         },
     });
 
-    revalidatePath("/super/workspaces");
+    revalidatePath("/super/workspace");
     return workspace;
+}
+
+export async function getWorkspaces() {
+    const session = await getSession();
+    if (!session || (session.user as any).role !== "SUPER_ADMIN") {
+        throw new Error("Unauthorized");
+    }
+
+    return await prisma.workspace.findMany({
+        include: {
+            _count: {
+                select: {
+                    universities: true,
+                    participants: true,
+                },
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
 }
 
 export async function updateWorkspace(id: string, data: {
@@ -53,6 +74,6 @@ export async function updateWorkspace(id: string, data: {
         data,
     });
 
-    revalidatePath("/super/workspaces");
+    revalidatePath("/super/workspace");
     return workspace;
 }

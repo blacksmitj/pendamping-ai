@@ -5,31 +5,40 @@ import { PageHeader } from "@/components/page-header"
 import { DataTable } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Plus, Calendar, Briefcase, ChevronRight, Settings2 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-
-const workspaces = [
-    {
-        id: "WS-2025-01",
-        name: "TKM Lanjutan 2025",
-        startDate: "2025-01-01",
-        endDate: "2025-12-31",
-        status: "Aktif",
-        universities: 12,
-        participants: 9000,
-    },
-    {
-        id: "WS-2024-01",
-        name: "TKM Lanjutan 2024",
-        startDate: "2024-01-01",
-        endDate: "2024-12-31",
-        status: "Selesai",
-        universities: 10,
-        participants: 8500,
-    },
-]
+import { Plus, Calendar, Briefcase, ChevronRight, Settings2, FileUp, Edit } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ImportDialog } from "@/components/participants/import-dialog"
+import { WorkspaceDialog } from "@/components/super/workspace-dialog"
+import { getWorkspaces } from "@/actions/workspaces"
+import { useQuery } from "@tanstack/react-query"
+import { queryKeys } from "@/lib/query-keys"
 
 export default function SuperWorkspacePage() {
+    const [importOpen, setImportOpen] = React.useState(false)
+    const [workspaceDialogOpen, setWorkspaceDialogOpen] = React.useState(false)
+    const [selectedWorkspace, setSelectedWorkspace] = React.useState<any | null>(null)
+    const [editWorkspace, setEditWorkspace] = React.useState<any | null>(null)
+
+    const { data: workspaces, isLoading, refetch } = useQuery({
+        queryKey: queryKeys.workspaces.all,
+        queryFn: () => getWorkspaces(),
+    })
+
+    const handleOpenImport = (workspace: any) => {
+        setSelectedWorkspace(workspace)
+        setImportOpen(true)
+    }
+
+    const handleCreateNew = () => {
+        setEditWorkspace(null)
+        setWorkspaceDialogOpen(true)
+    }
+
+    const handleEdit = (workspace: any) => {
+        setEditWorkspace(workspace)
+        setWorkspaceDialogOpen(true)
+    }
+
     const columns: any[] = [
         {
             header: "Nama Workspace",
@@ -52,7 +61,7 @@ export default function SuperWorkspacePage() {
             cell: (item: any) => (
                 <div className="flex items-center gap-2 text-sm text-slate-600">
                     <Calendar className="h-4 w-4 text-slate-400" />
-                    <span>{item.startDate} - {item.endDate}</span>
+                    <span>{new Date(item.startDate).toLocaleDateString('id-ID')} - {new Date(item.endDate).toLocaleDateString('id-ID')}</span>
                 </div>
             )
         },
@@ -61,25 +70,37 @@ export default function SuperWorkspacePage() {
             accessor: "participants",
             cell: (item: any) => (
                 <div className="text-xs space-y-1">
-                    <p><span className="font-semibold">{item.universities}</span> Universitas</p>
-                    <p><span className="font-semibold">{item.participants}</span> Peserta</p>
+                    <p><span className="font-semibold">{item._count?.universities || 0}</span> Universitas</p>
+                    <p><span className="font-semibold">{item._count?.participants || 0}</span> Peserta</p>
                 </div>
             )
         },
         {
             header: "Status",
             accessor: "status",
-            cell: (item: any) => (
-                <Badge variant={item.status === "Aktif" ? "default" : "secondary"} className={item.status === "Aktif" ? "bg-emerald-500" : ""}>
-                    {item.status}
-                </Badge>
-            )
+            cell: (item: any) => {
+                const statusLabel = item.status === "ACTIVE" ? "Aktif" : item.status === "COMPLETED" ? "Selesai" : "Arsip";
+                const variant = item.status === "ACTIVE" ? "default" : "secondary";
+                const className = item.status === "ACTIVE" ? "bg-emerald-500" : "";
+                
+                return (
+                    <Badge variant={variant} className={className}>
+                        {statusLabel}
+                    </Badge>
+                )
+            }
         },
         {
             header: "Aksi",
             id: "actions",
             cell: (item: any) => (
                 <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" className="h-8" onClick={() => handleOpenImport(item)}>
+                        Import Excel <FileUp className="ml-1 h-3.5 w-3.5" />
+                    </Button>
+                    <Button variant="outline" size="sm" className="h-8" onClick={() => handleEdit(item)}>
+                        Edit <Edit className="ml-1 h-3.5 w-3.5" />
+                    </Button>
                     <Button variant="outline" size="sm" className="h-8">
                         Kelola <ChevronRight className="ml-1 h-3.5 w-3.5" />
                     </Button>
@@ -98,14 +119,15 @@ export default function SuperWorkspacePage() {
                     title="Manajemen Workspace"
                     description="Buat dan kelola event tahunan (workspace) untuk program Pendampingan TKM."
                 />
-                <Button className="bg-indigo-600 hover:bg-indigo-700">
+                <Button className="bg-indigo-600 hover:bg-indigo-700" onClick={handleCreateNew}>
                     <Plus className="mr-2 h-4 w-4" /> Workspace Baru
                 </Button>
             </div>
 
             <DataTable
                 columns={columns}
-                data={workspaces}
+                data={workspaces || []}
+                isLoading={isLoading}
                 searchPlaceholder="Cari nama workspace..."
             />
 
@@ -122,6 +144,25 @@ export default function SuperWorkspacePage() {
                     </p>
                 </CardContent>
             </Card>
+
+            {selectedWorkspace && (
+                <ImportDialog
+                    open={importOpen}
+                    onOpenChange={setImportOpen}
+                    workspaceId={selectedWorkspace.id}
+                    workspaceName={selectedWorkspace.name}
+                    onSuccess={() => refetch()}
+                />
+            )}
+
+            <WorkspaceDialog
+                open={workspaceDialogOpen}
+                onOpenChange={(open) => {
+                    setWorkspaceDialogOpen(open)
+                    if (!open) refetch()
+                }}
+                workspace={editWorkspace}
+            />
         </div>
     )
 }
