@@ -13,7 +13,7 @@ async function getSession() {
 
 export async function approveUser(id: string) {
     const session = await getSession();
-    if (!session || (session.user.role !== "SUPER_ADMIN" && session.user.role !== "ADMIN_UNIV")) {
+    if (!session || (session.user.role !== "SUPER_ADMIN" && session.user.role !== "UNIVERSITY_ADMIN")) {
         throw new Error("Unauthorized");
     }
 
@@ -29,7 +29,7 @@ export async function approveUser(id: string) {
 
 export async function rejectUser(id: string) {
     const session = await getSession();
-    if (!session || (session.user.role !== "SUPER_ADMIN" && session.user.role !== "ADMIN_UNIV")) {
+    if (!session || (session.user.role !== "SUPER_ADMIN" && session.user.role !== "UNIVERSITY_ADMIN")) {
         throw new Error("Unauthorized");
     }
 

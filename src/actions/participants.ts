@@ -23,8 +23,8 @@ export async function updateParticipant(id: string, data: any) {
         },
     });
 
-    revalidatePath(`/participants/${id}`);
-    revalidatePath("/participants");
+    revalidatePath(`/participant/${id}`);
+    revalidatePath("/participant");
     return participant;
 }
 
@@ -37,8 +37,8 @@ export async function toggleParticipantStatus(id: string, status: string) {
         data: { status },
     });
 
-    revalidatePath(`/participants/${id}`);
-    revalidatePath("/participants");
+    revalidatePath(`/participant/${id}`);
+    revalidatePath("/participant");
     return participant;
 }
 
@@ -53,5 +53,5 @@ export async function bulkAssignToUniversity(participantIds: string[], universit
     });
 
     revalidatePath("/super/assign");
-    revalidatePath("/participants");
+    revalidatePath("/participant");
 }

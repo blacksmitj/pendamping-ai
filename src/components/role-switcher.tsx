@@ -20,10 +20,10 @@ import {
 import { useRole, Role } from "@/components/providers/role-provider"
 
 const roles: { value: Role; label: string; description: string }[] = [
-    { value: "pendamping", label: "Pendamping", description: "Akses menu logbook" },
-    { value: "admin_univ", label: "Admin Universitas", description: "Review laporan" },
-    { value: "pengawas", label: "Pengawas", description: "Monitor progress" },
-    { value: "super_admin", label: "Super Admin", description: "Akses penuh" },
+    { value: "mentor", label: "Mentor", description: "Access logbook menu" },
+    { value: "university_admin", label: "University Admin", description: "Review reports" },
+    { value: "university_supervisor", label: "University Supervisor", description: "Monitor progress" },
+    { value: "super_admin", label: "Super Admin", description: "Full access" },
 ]
 
 export function RoleSwitcher() {

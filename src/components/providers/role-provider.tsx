@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-export type Role = "pendamping" | "admin_univ" | "pengawas" | "super_admin"
+export type Role = "mentor" | "university_admin" | "university_supervisor" | "super_admin"
 
 interface RoleContextType {
     role: Role
@@ -12,7 +12,7 @@ interface RoleContextType {
 const RoleContext = React.createContext<RoleContextType | undefined>(undefined)
 
 export function RoleProvider({ children }: { children: React.ReactNode }) {
-    const [role, setRole] = React.useState<Role>("pendamping")
+    const [role, setRole] = React.useState<Role>("mentor")
 
     return (
         <RoleContext.Provider value={{ role, setRole }}>

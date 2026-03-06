@@ -21,7 +21,7 @@ export function StatCards() {
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Universitas</CardTitle>
+                        <CardTitle className="text-sm font-medium">Total University</CardTitle>
                         <Building2 className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -39,7 +39,7 @@ export function StatCards() {
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Peserta (All)</CardTitle>
+                        <CardTitle className="text-sm font-medium">Total Participant (All)</CardTitle>
                         <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -50,12 +50,12 @@ export function StatCards() {
         )
     }
 
-    if (role === "pengawas") {
+    if (role === "university_supervisor") {
         return (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Univ. Terpantau</CardTitle>
+                        <CardTitle className="text-sm font-medium">Monitored Univ.</CardTitle>
                         <Building2 className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -73,7 +73,7 @@ export function StatCards() {
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Peserta</CardTitle>
+                        <CardTitle className="text-sm font-medium">Total Participant</CardTitle>
                         <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -82,7 +82,7 @@ export function StatCards() {
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Review Tertunda</CardTitle>
+                        <CardTitle className="text-sm font-medium">Review Pending</CardTitle>
                         <LineChart className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -93,12 +93,12 @@ export function StatCards() {
         )
     }
 
-    if (role === "admin_univ") {
+    if (role === "university_admin") {
         return (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Peserta</CardTitle>
+                        <CardTitle className="text-sm font-medium">Total Participant</CardTitle>
                         <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -107,7 +107,7 @@ export function StatCards() {
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Pendamping</CardTitle>
+                        <CardTitle className="text-sm font-medium">Total Mentor</CardTitle>
                         <Book className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -125,7 +125,7 @@ export function StatCards() {
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Capaian Pending</CardTitle>
+                        <CardTitle className="text-sm font-medium">Output Pending</CardTitle>
                         <LineChart className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -140,7 +140,7 @@ export function StatCards() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Total Peserta</CardTitle>
+                    <CardTitle className="text-sm font-medium">Total Participant</CardTitle>
                     <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -149,7 +149,7 @@ export function StatCards() {
             </Card>
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Logbook Bulan Ini</CardTitle>
+                    <CardTitle className="text-sm font-medium">Monthly Logbook</CardTitle>
                     <Book className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -158,7 +158,7 @@ export function StatCards() {
             </Card>
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Capaian Terisi</CardTitle>
+                    <CardTitle className="text-sm font-medium">Output Completed</CardTitle>
                     <LineChart className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -167,7 +167,7 @@ export function StatCards() {
             </Card>
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Peserta Drop</CardTitle>
+                    <CardTitle className="text-sm font-medium">Dropped Participant</CardTitle>
                     <UserMinus className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>

@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     ] = await prisma.$transaction([
         prisma.participant.count({ where: universityId ? { universityId } : {} }),
         prisma.logbook.count({
-            where: universityId ? { pendamping: { universityId } } : {}
+            where: universityId ? { mentor: { universityId } } : {}
         }),
         prisma.user.count({ where: { status: "PENDING", ...(universityId ? { universityId } : {}) } }),
         prisma.output.count({
@@ -38,10 +38,10 @@ export async function GET(req: NextRequest) {
 
     // Recent activity (Logbooks)
     const recentLogbooks = await prisma.logbook.findMany({
-        where: universityId ? { pendamping: { universityId } } : {},
+        where: universityId ? { mentor: { universityId } } : {},
         take: 5,
         orderBy: { createdAt: "desc" },
-        include: { pendamping: { select: { name: true } } }
+        include: { mentor: { select: { name: true } } }
     });
 
     return NextResponse.json({

@@ -38,69 +38,69 @@ import { RoleSwitcher } from "@/components/role-switcher"
 
 // Define menus for each role
 const menus = {
-    pendamping: [
+    mentor: [
         {
             title: "Main Menu",
             items: [
                 { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-                { title: "Peserta", url: "/peserta", icon: Users },
+                { title: "Participant", url: "/participant", icon: Users },
                 { title: "Logbook", url: "/logbook", icon: Book },
-                { title: "Capaian Output", url: "/capaian-output", icon: LineChart },
+                { title: "Output", url: "/output", icon: LineChart },
             ],
         },
         {
             title: "System",
             items: [
-                { title: "Pengaturan", url: "/pengaturan", icon: Settings },
-                { title: "Akun", url: "/akun", icon: User },
+                { title: "Settings", url: "/settings", icon: Settings },
+                { title: "Account", url: "/account", icon: User },
             ],
         },
     ],
-    admin_univ: [
+    university_admin: [
         {
             title: "Main Menu",
             items: [
                 { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-                { title: "Peserta", url: "/peserta", icon: Users },
-                { title: "Pendamping", url: "/pendamping", icon: BookUser },
+                { title: "Participant", url: "/participant", icon: Users },
+                { title: "Mentor", url: "/mentor", icon: BookUser },
             ],
         },
         {
             title: "Review",
             items: [
-                { title: "Review Logbook", url: "/admin/logbook-review", icon: CheckSquare },
-                { title: "Review Capaian", url: "/admin/capaian-review", icon: ClipboardCheck },
+                { title: "Logbook Review", url: "/admin/logbook-review", icon: CheckSquare },
+                { title: "Output Review", url: "/admin/output-review", icon: ClipboardCheck },
             ],
         },
         {
             title: "System",
             items: [
                 { title: "Users", url: "/admin/users", icon: Users2 },
-                { title: "Assign Peserta", url: "/admin/assign", icon: Briefcase },
-                { title: "Pengaturan", url: "/pengaturan", icon: Settings },
-                { title: "Akun", url: "/akun", icon: User },
+                { title: "Assign Participant", url: "/admin/assign", icon: Briefcase },
+                { title: "Settings", url: "/settings", icon: Settings },
+                { title: "Account", url: "/account", icon: User },
             ],
         },
     ],
-    pengawas: [
+    university_supervisor: [
         {
             title: "Main Menu",
             items: [
                 { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-                { title: "Universitas", url: "/pengawas/universitas", icon: Building2 },
+                { title: "University", url: "/supervisor/university", icon: Building2 },
             ],
         },
         {
             title: "Monitor",
             items: [
-                { title: "Monitor Logbook", url: "/pengawas/logbook", icon: Monitor },
-                { title: "Monitor Capaian", url: "/pengawas/capaian", icon: LineChart },
+                { title: "Monitor Logbook", url: "/supervisor/logbook", icon: Monitor },
+                { title: "Monitor Output", url: "/supervisor/output", icon: LineChart },
             ],
         },
         {
             title: "System",
             items: [
-                { title: "Akun", url: "/akun", icon: User },
+                { title: "Account", url: "/account", icon: User },
             ],
         },
     ],
@@ -110,7 +110,7 @@ const menus = {
             items: [
                 { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
                 { title: "Workspace", url: "/super/workspace", icon: Briefcase },
-                { title: "Universitas", url: "/super/universitas", icon: Building2 },
+                { title: "University", url: "/super/university", icon: Building2 },
             ],
         },
         {
@@ -123,8 +123,8 @@ const menus = {
         {
             title: "System",
             items: [
-                { title: "Pengaturan", url: "/pengaturan", icon: Settings },
-                { title: "Akun", url: "/akun", icon: User },
+                { title: "Settings", url: "/settings", icon: Settings },
+                { title: "Account", url: "/account", icon: User },
             ],
         },
     ],
@@ -134,17 +134,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const pathname = usePathname()
     const { role } = useRole()
 
-    const navData = menus[role] || menus.pendamping
+    const navData = menus[role] || menus.mentor
 
     return (
         <Sidebar {...props}>
             <SidebarHeader>
                 <div className="flex items-center gap-2 px-4 py-2">
                     <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-indigo-600 text-white">
-                        <span className="font-bold">PA</span>
+                        <span className="font-bold">MA</span>
                     </div>
                     <div className="flex flex-col gap-0.5 leading-none">
-                        <span className="font-semibold">Pendamping AI</span>
+                        <span className="font-semibold">Mentor AI</span>
                         <span className="text-xs text-muted-foreground">v0.1.0</span>
                     </div>
                 </div>

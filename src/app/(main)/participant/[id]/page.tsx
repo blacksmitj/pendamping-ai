@@ -139,12 +139,12 @@ export default function PesertaDetailPage() {
                 </div>
                 <div className="hidden md:flex items-center gap-6 pr-4">
                     <div className="text-right">
-                        <p className="text-[10px] uppercase text-slate-400 font-bold tracking-tight">Pendamping</p>
+                        <p className="text-[10px] uppercase text-slate-400 font-bold tracking-tight">Mentor</p>
                         <p className="text-sm font-semibold text-slate-700">{mockParticipant.mentor}</p>
                     </div>
                     <Separator orientation="vertical" className="h-10" />
                     <div className="text-right">
-                        <p className="text-[10px] uppercase text-slate-400 font-bold tracking-tight">Universitas</p>
+                        <p className="text-[10px] uppercase text-slate-400 font-bold tracking-tight">University</p>
                         <p className="text-sm font-semibold text-slate-700">{mockParticipant.university}</p>
                     </div>
                 </div>
@@ -154,11 +154,11 @@ export default function PesertaDetailPage() {
                 <div className="flex items-center justify-between mb-2">
                     <TabsList className="bg-slate-100/50 p-1 border">
                         <TabsTrigger value="progress" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Monitoring</TabsTrigger>
-                        <TabsTrigger value="profile">Profil Lengkap</TabsTrigger>
-                        <TabsTrigger value="logbook">Histori Logbook</TabsTrigger>
-                        <TabsTrigger value="capaian">Histori Output</TabsTrigger>
-                        <TabsTrigger value="files">Dokumen</TabsTrigger>
-                        <TabsTrigger value="update">Update Status</TabsTrigger>
+                        <TabsTrigger value="profile">Full Profile</TabsTrigger>
+                        <TabsTrigger value="logbook">Logbook History</TabsTrigger>
+                        <TabsTrigger value="capaian">Output History</TabsTrigger>
+                        <TabsTrigger value="files">Documents</TabsTrigger>
+                        <TabsTrigger value="update">Status Update</TabsTrigger>
                     </TabsList>
                 </div>
 
@@ -170,7 +170,7 @@ export default function PesertaDetailPage() {
                             <Card className="border-indigo-100 bg-indigo-50/30">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-sm font-bold text-indigo-900 flex items-center gap-2">
-                                        <TrendingUp className="h-4 w-4" /> Pertumbuhan Omzet
+                                        <TrendingUp className="h-4 w-4" /> Revenue Growth
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
@@ -178,39 +178,39 @@ export default function PesertaDetailPage() {
                                         <span className="text-3xl font-extrabold text-indigo-700">+70%</span>
                                         <span className="text-xs text-indigo-500 font-medium font-mono">Vs Baseline</span>
                                     </div>
-                                    <p className="text-[11px] text-slate-500 mt-2 font-medium">Target: Rp 10.000.000 / Bulan</p>
+                                    <p className="text-[11px] text-slate-500 mt-2 font-medium">Target: Rp 10.000.000 / Month</p>
                                 </CardContent>
                             </Card>
                             <Card className="border-emerald-100 bg-emerald-50/30">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-sm font-bold text-emerald-900 flex items-center gap-2">
-                                        <Users className="h-4 w-4" /> Tenaga Kerja
+                                        <Users className="h-4 w-4" /> Workers
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="flex items-baseline gap-2">
                                         <span className="text-3xl font-extrabold text-emerald-700">4</span>
-                                        <span className="text-xs text-emerald-500 font-medium font-mono">Orang</span>
+                                        <span className="text-xs text-emerald-500 font-medium font-mono">People</span>
                                     </div>
-                                    <p className="text-[11px] text-slate-500 mt-2 font-medium">+2 Pekerja Baru (Bulan 3)</p>
+                                    <p className="text-[11px] text-slate-500 mt-2 font-medium">+2 New Workers (Month 3)</p>
                                 </CardContent>
                             </Card>
                             <Card>
                                 <CardHeader className="pb-3">
-                                    <CardTitle className="text-sm font-bold">Kelengkapan Laporan</CardTitle>
+                                    <CardTitle className="text-sm font-bold">Report Completeness</CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <div className="flex justify-between items-center text-xs">
-                                        <span className="text-slate-500">Capaian Output</span>
-                                        <Badge className="bg-indigo-100 text-indigo-700 border-none">3/3 Bulan</Badge>
+                                        <span className="text-slate-500">Output Report</span>
+                                        <Badge className="bg-indigo-100 text-indigo-700 border-none">3/3 Months</Badge>
                                     </div>
                                     <div className="flex justify-between items-center text-xs">
-                                        <span className="text-slate-500">Logbook Harian</span>
-                                        <Badge className="bg-amber-100 text-amber-700 border-none">12 Kunjungan</Badge>
+                                        <span className="text-slate-500">Daily Logbook</span>
+                                        <Badge className="bg-amber-100 text-amber-700 border-none">12 Visits</Badge>
                                     </div>
                                     <div className="flex justify-between items-center text-xs">
-                                        <span className="text-slate-500">Update Profil</span>
-                                        <Badge className="bg-emerald-100 text-emerald-700 border-none">Lengkap</Badge>
+                                        <span className="text-slate-500">Profile Update</span>
+                                        <Badge className="bg-emerald-100 text-emerald-700 border-none">Complete</Badge>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -221,9 +221,9 @@ export default function PesertaDetailPage() {
                             <Card className="shadow-sm">
                                 <CardHeader>
                                     <CardTitle className="text-md flex items-center gap-2">
-                                        <DollarSign className="h-5 w-5 text-indigo-600" /> Tren Pendapatan bulanan
+                                        <DollarSign className="h-5 w-5 text-indigo-600" /> Monthly Revenue Trend
                                     </CardTitle>
-                                    <CardDescription>Perbandingan Omset dari Data Awal s/d Saat ini.</CardDescription>
+                                    <CardDescription>Comparison of Revenue from Baseline to Present.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="h-[300px] w-full">
@@ -258,17 +258,17 @@ export default function PesertaDetailPage() {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-lg flex items-center gap-2">
-                                    <UserIcon className="h-5 w-5 text-indigo-600" /> Identitas Pribadi
+                                    <UserIcon className="h-5 w-5 text-indigo-600" /> Personal Identity
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1">
-                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Nama Lengkap</p>
+                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Full Name</p>
                                         <p className="text-sm font-medium">{mockParticipant.name}</p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] uppercase text-slate-400 font-bold">NIK</p>
+                                        <p className="text-[10px] uppercase text-slate-400 font-bold">National ID</p>
                                         <p className="text-sm font-medium font-mono tracking-tighter">{mockParticipant.nik}</p>
                                     </div>
                                     <div className="space-y-1">
@@ -280,11 +280,11 @@ export default function PesertaDetailPage() {
                                         <p className="text-sm font-medium">{mockParticipant.phone}</p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Pendidikan</p>
+                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Education</p>
                                         <p className="text-sm font-medium">{mockParticipant.education}</p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Disabilitas</p>
+                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Disability</p>
                                         <p className="text-sm font-medium">{mockParticipant.disability}</p>
                                     </div>
                                 </div>
@@ -294,32 +294,32 @@ export default function PesertaDetailPage() {
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-lg flex items-center gap-2">
-                                    <Building className="h-5 w-5 text-indigo-600" /> Profil Usaha & Operasional
+                                    <Building className="h-5 w-5 text-indigo-600" /> Business & Operational Profile
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1">
-                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Nama Usaha</p>
+                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Business Name</p>
                                         <p className="text-sm font-medium">{mockParticipant.businessName}</p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Sektor</p>
+                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Sector</p>
                                         <p className="text-sm font-medium">{mockParticipant.sector}</p>
                                     </div>
                                     <div className="space-y-1 col-span-2">
-                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Alamat Usaha</p>
+                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Business Address</p>
                                         <p className="text-sm font-medium">
                                             {mockParticipant.address}, {mockParticipant.city}, {mockParticipant.province}
                                         </p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Omset Awal</p>
+                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Baseline Revenue</p>
                                         <p className="text-sm font-bold text-slate-700">Rp {new Intl.NumberFormat('id-ID').format(mockParticipant.baseline.revenue)}</p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Produksi Awal</p>
-                                        <p className="text-sm font-medium">{mockParticipant.baseline.volume} {mockParticipant.baseline.unit} / Bln</p>
+                                        <p className="text-[10px] uppercase text-slate-400 font-bold">Baseline Volume</p>
+                                        <p className="text-sm font-medium">{mockParticipant.baseline.volume} {mockParticipant.baseline.unit} / Month</p>
                                     </div>
                                 </div>
                             </CardContent>
@@ -332,8 +332,8 @@ export default function PesertaDetailPage() {
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
                             <div>
-                                <CardTitle className="text-lg">Daftar Kunjungan Pendamping</CardTitle>
-                                <CardDescription>Catatan aktivitas harian yang dilakukan oleh {mockParticipant.mentor}.</CardDescription>
+                                <CardTitle className="text-lg">Mentor Visit List</CardTitle>
+                                <CardDescription>Daily activity records performed by {mockParticipant.mentor}.</CardDescription>
                             </div>
                             <Button variant="outline" size="sm" className="h-9">
                                 <Download className="mr-2 h-4 w-4" /> Export Excel
@@ -343,11 +343,11 @@ export default function PesertaDetailPage() {
                             <Table>
                                 <TableHeader>
                                     <TableRow className="bg-slate-50 border-y">
-                                        <TableHead className="w-[120px]">Tanggal</TableHead>
-                                        <TableHead>Materi Pendampingan</TableHead>
-                                        <TableHead className="w-[100px]">Metode</TableHead>
-                                        <TableHead className="w-[100px]">Waktu</TableHead>
-                                        <TableHead className="text-right">Aksi</TableHead>
+                                        <TableHead className="w-[120px]">Date</TableHead>
+                                        <TableHead>Mentoring Topic</TableHead>
+                                        <TableHead className="w-[100px]">Method</TableHead>
+                                        <TableHead className="w-[100px]">Time</TableHead>
+                                        <TableHead className="text-right">Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -362,7 +362,7 @@ export default function PesertaDetailPage() {
                                             </TableCell>
                                             <TableCell>
                                                 <Badge variant="secondary" className={log.delivery === 'FACE_TO_FACE' ? 'bg-indigo-50 text-indigo-700' : 'bg-rose-50 text-rose-700'}>
-                                                    {log.delivery === 'FACE_TO_FACE' ? 'Luring' : 'Daring'}
+                                                    {log.delivery === 'FACE_TO_FACE' ? 'Face-to-Face' : 'Online'}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell className="text-slate-500 font-mono text-xs">{log.startTime} - {log.endTime}</TableCell>
@@ -383,24 +383,24 @@ export default function PesertaDetailPage() {
                 <TabsContent value="capaian" className="outline-none">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-lg">Laporan Capaian Output Bulanan</CardTitle>
-                            <CardDescription>Visualisasi progress KPIs peserta per periode pelaporan.</CardDescription>
+                            <CardTitle className="text-lg">Monthly Output Report</CardTitle>
+                            <CardDescription>Visualization of participant KPIs progress per reporting period.</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <Table>
                                 <TableHeader>
                                     <TableRow className="bg-slate-50">
-                                        <TableHead>Bulan Laporan</TableHead>
+                                        <TableHead>Month</TableHead>
                                         <TableHead className="text-right">Revenue (Rp)</TableHead>
-                                        <TableHead className="text-right">Vol. Penjualan</TableHead>
-                                        <TableHead className="text-right">Tenaga Kerja</TableHead>
+                                        <TableHead className="text-right">Sales Volume</TableHead>
+                                        <TableHead className="text-right">Workers</TableHead>
                                         <TableHead>Status</TableHead>
-                                        <TableHead className="text-right">Aksi</TableHead>
+                                        <TableHead className="text-right">Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     <TableRow className="bg-slate-50/30">
-                                        <TableCell className="italic font-medium text-slate-400">Baseline (Data Awal)</TableCell>
+                                        <TableCell className="italic font-medium text-slate-400">Baseline (Initial Data)</TableCell>
                                         <TableCell className="text-right text-slate-500">{new Intl.NumberFormat('id-ID').format(mockParticipant.baseline.revenue)}</TableCell>
                                         <TableCell className="text-right text-slate-500">{mockParticipant.baseline.volume}</TableCell>
                                         <TableCell className="text-right text-slate-500">{mockParticipant.baseline.workers}</TableCell>
@@ -415,7 +415,7 @@ export default function PesertaDetailPage() {
                                             <TableCell className="text-right font-bold">{cap.workers}</TableCell>
                                             <TableCell>
                                                 <Badge variant={cap.status === 'Approved' ? 'default' : 'secondary'} className={cap.status === 'Approved' ? 'bg-emerald-500' : 'bg-amber-500 text-white border-none'}>
-                                                    {cap.status === 'Approved' ? 'Selesai' : 'Review'}
+                                                    {cap.status === 'Approved' ? 'Finished' : 'Review'}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell className="text-right">
@@ -435,8 +435,8 @@ export default function PesertaDetailPage() {
                 <TabsContent value="files" className="outline-none">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-lg">Arsip Dokumen Peserta</CardTitle>
-                            <CardDescription>Semua berkas yang telah diunggah oleh pendamping dan peserta.</CardDescription>
+                            <CardTitle className="text-lg">Participant Document Archive</CardTitle>
+                            <CardDescription>All files uploaded by mentors and participants.</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -461,7 +461,7 @@ export default function PesertaDetailPage() {
                                                 </div>
                                             </div>
                                             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <Button size="sm" variant="outline" className="h-7 text-[10px] flex-1">Unduh</Button>
+                                                <Button size="sm" variant="outline" className="h-7 text-[10px] flex-1">Download</Button>
                                                 <Button size="sm" variant="outline" className="h-7 text-[10px] p-0 w-7"><Eye className="h-3 w-3" /></Button>
                                             </div>
                                         </div>
@@ -477,70 +477,70 @@ export default function PesertaDetailPage() {
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-lg flex items-center gap-2">
-                                <History className="h-5 w-5 text-indigo-600" /> Update Status Pendampingan
+                                <History className="h-5 w-5 text-indigo-600" /> Update Mentoring Status
                             </CardTitle>
-                            <CardDescription>Diupdate oleh pendamping secara berkala.</CardDescription>
+                            <CardDescription>Updated by mentors periodically.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-8 pt-4">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                 <div className="space-y-4">
                                     <Label className="text-sm font-bold flex items-center gap-2">
-                                        <MessageCircle className="h-4 w-4 text-slate-400" /> Status Komunikasi
+                                        <MessageCircle className="h-4 w-4 text-slate-400" /> Communication Status
                                     </Label>
-                                    <RadioGroup defaultValue="lancar" className="space-y-2">
+                                    <RadioGroup defaultValue="smooth" className="space-y-2">
                                         <div className="flex items-center space-x-2 p-2 border rounded-lg hover:bg-slate-50 transition-colors">
-                                            <RadioGroupItem value="lancar" id="l1" />
-                                            <Label htmlFor="l1" className="flex-1 cursor-pointer">Lancar & Responsif</Label>
+                                            <RadioGroupItem value="smooth" id="l1" />
+                                            <Label htmlFor="l1" className="flex-1 cursor-pointer">Smooth & Responsive</Label>
                                         </div>
                                         <div className="flex items-center space-x-2 p-2 border rounded-lg hover:bg-slate-50 transition-colors">
-                                            <RadioGroupItem value="pasif" id="l2" />
-                                            <Label htmlFor="l2" className="flex-1 cursor-pointer">Pasif / Slow Respon</Label>
+                                            <RadioGroupItem value="passive" id="l2" />
+                                            <Label htmlFor="l2" className="flex-1 cursor-pointer">Passive / Slow Response</Label>
                                         </div>
                                         <div className="flex items-center space-x-2 p-2 border rounded-lg hover:bg-slate-50 transition-colors">
-                                            <RadioGroupItem value="sulit" id="l3" />
-                                            <Label htmlFor="l3" className="flex-1 cursor-pointer">Sulit Dihubungi</Label>
+                                            <RadioGroupItem value="hard" id="l3" />
+                                            <Label htmlFor="l3" className="flex-1 cursor-pointer">Hard to Contact</Label>
                                         </div>
                                     </RadioGroup>
                                 </div>
 
                                 <div className="space-y-4">
                                     <Label className="text-sm font-bold flex items-center gap-2">
-                                        <CreditCard className="h-4 w-4 text-slate-400" /> Status Pencairan
+                                        <CreditCard className="h-4 w-4 text-slate-400" /> Disbursement Status
                                     </Label>
-                                    <Select defaultValue="tahap1">
+                                    <Select defaultValue="stage1">
                                         <SelectTrigger className="h-11">
-                                            <SelectValue placeholder="Pilih Tahap" />
+                                            <SelectValue placeholder="Select Stage" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="tahap1">Cair Tahap 1 (Bulan 1)</SelectItem>
-                                            <SelectItem value="tahap2">Cair Tahap 2 (Bulan 3)</SelectItem>
-                                            <SelectItem value="tertunda">Tertunda / Ada Kendala</SelectItem>
+                                            <SelectItem value="stage1">Disbursed Stage 1 (Month 1)</SelectItem>
+                                            <SelectItem value="stage2">Disbursed Stage 2 (Month 3)</SelectItem>
+                                            <SelectItem value="delayed">Delayed / Issue</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
 
                                 <div className="space-y-4">
                                     <Label className="text-sm font-bold flex items-center gap-2">
-                                        <Ban className="h-4 w-4 text-slate-400" /> Kondisi Khusus
+                                        <Ban className="h-4 w-4 text-slate-400" /> Special Conditions
                                     </Label>
                                     <div className="flex items-center space-x-2">
-                                        <Label htmlFor="drop" className="flex-1 text-slate-600">Peserta ini mengundurkan diri / Drop</Label>
+                                        <Label htmlFor="drop" className="flex-1 text-slate-600">This participant dropped / withdrew</Label>
                                         <Input type="checkbox" id="drop" className="h-5 w-5 rounded-md border-slate-300" />
                                     </div>
                                     <Separator />
                                     <div className="space-y-2">
-                                        <Label className="text-xs">Alasan Drop (Jika Ada)</Label>
-                                        <Input placeholder="Tulis alasan jika peserta drop..." />
+                                        <Label className="text-xs">Reason for Dropping (If Any)</Label>
+                                        <Input placeholder="Write reason if participant drops..." />
                                     </div>
                                 </div>
                             </div>
                         </CardContent>
                         <CardFooter className="bg-slate-50 rounded-b-xl py-4 justify-between">
                             <p className="text-xs text-slate-500 italic flex items-center gap-1.5">
-                                <Clock className="h-3 w-3" /> Terakhir diupdate oleh Pendamping pada 2026-03-05 10:30
+                                <Clock className="h-3 w-3" /> Last updated by Mentor on 2026-03-05 10:30
                             </p>
                             <Button className="bg-indigo-600 hover:bg-indigo-700 shadow-indigo-100 shadow-lg">
-                                <Save className="mr-2 h-4 w-4" /> Simpan Update Status
+                                <Save className="mr-2 h-4 w-4" /> Save Status Update
                             </Button>
                         </CardFooter>
                     </Card>

@@ -19,25 +19,25 @@ const logbooks = [
         date: "2026-03-05",
         participants: ["Ahmad R.", "Budi S."],
         topic: "Business Model Canvas",
-        method: "Luring",
+        method: "Face-to-Face",
     },
     // ...
 ]
 
 const recentApprovals = [
     {
-        id: "A1",
+        id: "1",
         date: "2026-03-05",
         user: "Budi Pratama",
-        description: "Pendaftaran Admin Univ UI",
+        description: "UI Univ Admin Registration",
         status: "Pending",
     },
     {
-        id: "A2",
+        id: "2",
         date: "2026-03-04",
         user: "Siska Amelia",
-        description: "Pendaftaran Pengawas Pusat",
-        status: "Selesai",
+        description: "Central Supervisor Registration",
+        status: "Done",
     },
 ]
 
@@ -48,15 +48,15 @@ export function RecentLogbooks() {
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle>Persetujuan User Terbaru</CardTitle>
+                    <CardTitle>Latest User Approvals</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Tanggal</TableHead>
+                                <TableHead>Date</TableHead>
                                 <TableHead>User</TableHead>
-                                <TableHead>Deskripsi</TableHead>
+                                <TableHead>Description</TableHead>
                                 <TableHead>Status</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -67,7 +67,7 @@ export function RecentLogbooks() {
                                     <TableCell className="font-medium">{app.user}</TableCell>
                                     <TableCell>{app.description}</TableCell>
                                     <TableCell>
-                                        <Badge variant={app.status === "Selesai" ? "default" : "secondary"}>
+                                        <Badge variant={app.status === "Done" ? "default" : "secondary"}>
                                             {app.status}
                                         </Badge>
                                     </TableCell>
@@ -83,16 +83,16 @@ export function RecentLogbooks() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Logbook Terbaru</CardTitle>
+                <CardTitle>Recent Logbooks</CardTitle>
             </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Tanggal</TableHead>
-                            <TableHead>Metode</TableHead>
-                            <TableHead>Peserta</TableHead>
-                            <TableHead>Materi</TableHead>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Method</TableHead>
+                            <TableHead>Participants</TableHead>
+                            <TableHead>Topic</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -100,7 +100,7 @@ export function RecentLogbooks() {
                             <TableRow key={log.id}>
                                 <TableCell>{log.date}</TableCell>
                                 <TableCell>
-                                    <Badge variant={log.method === "Luring" ? "default" : "secondary"}>
+                                    <Badge variant={log.method === "Face-to-Face" ? "default" : "secondary"}>
                                         {log.method}
                                     </Badge>
                                 </TableCell>

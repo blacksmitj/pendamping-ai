@@ -6,8 +6,8 @@ import { RoleProvider } from "@/components/providers/role-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Pendamping AI",
-  description: "Sistem Manajemen Pendampingan",
+  title: "Mentor AI",
+  description: "Mentoring Management System",
 }
 
 import { QueryProvider } from "@/components/providers/query-provider"

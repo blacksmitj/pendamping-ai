@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
 import { Checkbox } from "@/components/ui/checkbox"
 
-const steps = ["Data Utama", "Kondisi & Bukti", "Tenaga Kerja Baru"]
+const steps = ["Main Data", "Conditions & Evidence", "New Workers"]
 
 export default function CreateCapaianOutputPage() {
     const router = useRouter()
@@ -39,8 +39,8 @@ export default function CreateCapaianOutputPage() {
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Buat Laporan Capaian</h1>
-                    <p className="text-muted-foreground">Isi data capaian output bulanan peserta binaan.</p>
+                    <h1 className="text-3xl font-bold tracking-tight">Create Output Report</h1>
+                    <p className="text-muted-foreground">Fill in monthly output data for mentored participants.</p>
                 </div>
             </div>
 
@@ -81,10 +81,10 @@ export default function CreateCapaianOutputPage() {
                         <div className="space-y-6">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label>Pilih Peserta</Label>
+                                    <Label>Select Participant</Label>
                                     <Select defaultValue="T001">
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Pilih..." />
+                                            <SelectValue placeholder="Select..." />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="T001">Ahmad Rifai</SelectItem>
@@ -94,36 +94,36 @@ export default function CreateCapaianOutputPage() {
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Bulan Laporan</Label>
+                                    <Label>Reporting Month</Label>
                                     <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background flex-row items-center cursor-pointer">
                                         <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
-                                        <span>Maret 2026</span>
+                                        <span>March 2026</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-4">
-                                <Label>Omzet & Penjualan</Label>
+                             <div className="space-y-4">
+                                <Label>Revenue & Sales</Label>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <Label className="text-xs">Omzet Bulan Ini</Label>
+                                        <Label className="text-xs">Revenue This Month</Label>
                                         <div className="relative">
                                             <span className="absolute left-3 top-2.5 text-xs text-muted-foreground">Rp</span>
                                             <Input className="pl-10" placeholder="0" />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="text-xs">Volume Penjualan (Unit)</Label>
+                                        <Label className="text-xs">Sales Volume (Units)</Label>
                                         <Input placeholder="0" />
                                     </div>
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label>Kapasitas Produksi Per Bulan (Maksimal)</Label>
+                                <Label>Monthly Production Capacity (Max)</Label>
                                 <div className="flex gap-4">
-                                    <Input placeholder="Jumlah Unit" className="flex-1" />
-                                    <Input placeholder="Satuan (ex: Box, Kg)" className="w-1/3" />
+                                    <Input placeholder="Unit Amount" className="flex-1" />
+                                    <Input placeholder="Unit (e.g., Box, Kg)" className="w-1/3" />
                                 </div>
                             </div>
                         </div>
@@ -131,49 +131,49 @@ export default function CreateCapaianOutputPage() {
 
                     {currentStep === 2 && (
                         <div className="space-y-6">
-                            <div className="grid grid-cols-2 gap-6">
+                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-3">
-                                    <Label>Area Pemasaran</Label>
+                                    <Label>Marketing Area</Label>
                                     <RadioGroup defaultValue="village" className="space-y-1">
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="village" id="village" />
-                                            <Label htmlFor="village" className="font-normal">Antar Desa/Kelurahan</Label>
+                                            <Label htmlFor="village" className="font-normal">Inter-Village</Label>
                                         </div>
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="district" id="district" />
-                                            <Label htmlFor="district" className="font-normal">Antar Kabupaten/Kota</Label>
+                                            <Label htmlFor="district" className="font-normal">Inter-City/District</Label>
                                         </div>
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="province" id="province" />
-                                            <Label htmlFor="province" className="font-normal">Antar Provinsi</Label>
+                                            <Label htmlFor="province" className="font-normal">Inter-Province</Label>
                                         </div>
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="national" id="national" />
-                                            <Label htmlFor="national" className="font-normal">Nasional/Ekspor</Label>
+                                            <Label htmlFor="national" className="font-normal">National/Export</Label>
                                         </div>
                                     </RadioGroup>
                                 </div>
-                                <div className="space-y-4">
+                                 <div className="space-y-4">
                                     <div className="space-y-2">
-                                        <Label>Kondisi Usaha</Label>
+                                        <Label>Business Condition</Label>
                                         <Select defaultValue="increase">
                                             <SelectTrigger>
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="increase">Meningkat</SelectItem>
-                                                <SelectItem value="stable">Stabil</SelectItem>
-                                                <SelectItem value="decrease">Menurun</SelectItem>
+                                                <SelectItem value="increase">Increasing</SelectItem>
+                                                <SelectItem value="stable">Stable</SelectItem>
+                                                <SelectItem value="decrease">Decreasing</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label>Pembukuan Cashflow</Label>
+                                        <Label>Cashflow Bookkeeping</Label>
                                         <Select defaultValue="yes">
                                             <SelectTrigger><SelectValue /></SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="yes">Ya</SelectItem>
-                                                <SelectItem value="no">Tidak</SelectItem>
+                                                <SelectItem value="yes">Yes</SelectItem>
+                                                <SelectItem value="no">No</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -181,20 +181,20 @@ export default function CreateCapaianOutputPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label>Kendala / Masalah</Label>
-                                <Textarea placeholder="Tuliskan kendala bisnis bulan ini..." />
+                                <Label>Obstacles / Issues</Label>
+                                <Textarea placeholder="Describe business obstacles this month..." />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label className="text-xs">Bukti Omzet (File)</Label>
+                                    <Label className="text-xs">Revenue Proof (File)</Label>
                                     <div className="border border-dashed rounded-md p-3 flex flex-col items-center gap-2 hover:bg-muted/50 cursor-pointer">
                                         <Upload className="h-4 w-4 text-muted-foreground" />
                                         <span className="text-xs text-muted-foreground uppercase">Upload</span>
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-xs">LPJ / Dokumentasi (File)</Label>
+                                    <Label className="text-xs">LPJ / Documentation (File)</Label>
                                     <div className="border border-dashed rounded-md p-3 flex flex-col items-center gap-2 hover:bg-muted/50 cursor-pointer">
                                         <Upload className="h-4 w-4 text-muted-foreground" />
                                         <span className="text-xs text-muted-foreground uppercase">Upload</span>
@@ -208,11 +208,11 @@ export default function CreateCapaianOutputPage() {
                         <div className="space-y-6">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <h3 className="text-lg font-semibold">Tenaga Kerja Baru</h3>
-                                    <p className="text-xs text-muted-foreground">Wajib isi jika ada penambahan tenaga kerja bulan ini.</p>
+                                    <h3 className="text-lg font-semibold">New Workers</h3>
+                                    <p className="text-xs text-muted-foreground">Required if there are new employees this month.</p>
                                 </div>
                                 <Button onClick={addEmployee} size="sm" variant="outline" className="text-indigo-600 border-indigo-200 bg-indigo-50 hover:bg-indigo-100">
-                                    <Plus className="mr-1 h-3 w-3" /> Tambah TK
+                                    <Plus className="mr-1 h-3 w-3" /> Add Worker
                                 </Button>
                             </div>
 
@@ -232,25 +232,25 @@ export default function CreateCapaianOutputPage() {
                                         <CardContent className="pt-6 space-y-4">
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="space-y-2">
-                                                    <Label className="text-xs">NIK Tenaga Kerja</Label>
+                                                    <Label className="text-xs">Worker National ID</Label>
                                                     <Input placeholder="16 digit NIK" />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label className="text-xs">Nama Lengkap</Label>
-                                                    <Input placeholder="Sesuai KTP" />
+                                                    <Label className="text-xs">Full Name</Label>
+                                                    <Input placeholder="According to ID" />
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-3 gap-4">
+                                             <div className="grid grid-cols-3 gap-4">
                                                 <div className="space-y-2">
                                                     <Label className="text-xs">Gender</Label>
                                                     <Select><SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="L">Laki-laki</SelectItem>
-                                                            <SelectItem value="P">Perempuan</SelectItem>
+                                                            <SelectItem value="M">Male</SelectItem>
+                                                            <SelectItem value="F">Female</SelectItem>
                                                         </SelectContent></Select>
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label className="text-xs">Status TK</Label>
+                                                    <Label className="text-xs">Worker Status</Label>
                                                     <Select><SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
                                                         <SelectContent>
                                                             <SelectItem value="full">Full-time</SelectItem>
@@ -259,7 +259,7 @@ export default function CreateCapaianOutputPage() {
                                                 </div>
                                                 <div className="flex items-center space-x-2 pt-8">
                                                     <Checkbox id={`dis-${emp.id}`} />
-                                                    <Label htmlFor={`dis-${emp.id}`} className="text-xs">Disabilitas</Label>
+                                                    <Label htmlFor={`dis-${emp.id}`} className="text-xs">Disability</Label>
                                                 </div>
                                             </div>
                                         </CardContent>
@@ -271,15 +271,15 @@ export default function CreateCapaianOutputPage() {
                 </CardContent>
                 <CardFooter className="flex justify-between border-t pt-6">
                     <Button variant="ghost" onClick={handleBack} disabled={currentStep === 1}>
-                        <ChevronLeft className="mr-2 h-4 w-4" /> Sebelumnya
+                        <ChevronLeft className="mr-2 h-4 w-4" /> Previous
                     </Button>
                     {currentStep < steps.length ? (
                         <Button onClick={handleNext} className="bg-indigo-600 hover:bg-indigo-700">
-                            Selanjutnya <ChevronRight className="ml-2 h-4 w-4" />
+                            Next <ChevronRight className="ml-2 h-4 w-4" />
                         </Button>
                     ) : (
                         <Button className="bg-emerald-600 hover:bg-emerald-700">
-                            <Save className="mr-2 h-4 w-4" /> Simpan Laporan
+                            <Save className="mr-2 h-4 w-4" /> Save Report
                         </Button>
                     )}
                 </CardFooter>

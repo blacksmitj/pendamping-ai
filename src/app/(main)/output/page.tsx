@@ -28,36 +28,36 @@ type OutputReport = {
 const reports: OutputReport[] = [
     {
         id: "REP001",
-        month: "Maret 2026",
+        month: "March 2026",
         participantName: "Ahmad Rifai",
         revenue: "Rp 15.000.000",
-        newEmployees: "2 orang baru",
+        newEmployees: "2 new people",
         status: "Draft",
     },
     {
         id: "REP002",
-        month: "Februari 2026",
+        month: "February 2026",
         participantName: "Budi Santoso",
         revenue: "Rp 8.200.000",
-        newEmployees: "0 orang baru",
+        newEmployees: "0 new people",
         status: "Submitted",
     },
     {
         id: "REP003",
-        month: "Februari 2026",
+        month: "February 2026",
         participantName: "Citra Kusuma",
         revenue: "Rp 12.500.000",
-        newEmployees: "1 orang baru",
+        newEmployees: "1 new person",
         status: "Verified",
     },
 ]
 
 export default function CapaianOutputPage() {
     const columns = [
-        { header: "Bulan", accessor: "month" as keyof OutputReport, className: "font-medium" },
-        { header: "Peserta", accessor: "participantName" as keyof OutputReport },
+        { header: "Month", accessor: "month" as keyof OutputReport, className: "font-medium" },
+        { header: "Participant", accessor: "participantName" as keyof OutputReport },
         {
-            header: "Omzet",
+            header: "Revenue",
             accessor: "revenue" as keyof OutputReport,
             cell: (r: OutputReport) => (
                 <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export default function CapaianOutputPage() {
             ),
         },
         {
-            header: "TK Baru",
+            header: "New Employees",
             accessor: "newEmployees" as keyof OutputReport,
             cell: (r: OutputReport) => (
                 <div className="flex items-center gap-2">
@@ -85,11 +85,11 @@ export default function CapaianOutputPage() {
                 switch (r.status) {
                     case "Verified":
                         badgeClass = "bg-emerald-500 hover:bg-emerald-600 text-white"
-                        statusLabel = "Terverifikasi"
+                        statusLabel = "Verified"
                         break
                     case "Submitted":
                         badgeClass = "bg-slate-500 hover:bg-slate-600 text-white"
-                        statusLabel = "Terkirim"
+                        statusLabel = "Submitted"
                         break
                     case "Draft":
                         badgeClass = "border-slate-300 text-slate-600"
@@ -104,7 +104,7 @@ export default function CapaianOutputPage() {
             },
         },
         {
-            header: "Aksi",
+            header: "Action",
             className: "text-right",
             cell: (r: OutputReport) => (
                 <DropdownMenu>
@@ -114,12 +114,12 @@ export default function CapaianOutputPage() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+                        <DropdownMenuLabel>Action</DropdownMenuLabel>
                         <DropdownMenuItem>
                             <FileEdit className="mr-2 h-4 w-4" /> Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">
-                            <Trash2 className="mr-2 h-4 w-4" /> Hapus
+                            <Trash2 className="mr-2 h-4 w-4" /> Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -129,15 +129,15 @@ export default function CapaianOutputPage() {
 
     const actionButton = (
         <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
-            <Link href="/capaian-output/buat">
-                <Plus className="mr-2 h-4 w-4" /> Buat Laporan Baru
+            <Link href="/output/create">
+                <Plus className="mr-2 h-4 w-4" /> Create New Report
             </Link>
         </Button>
     )
 
     const filters = (
         <>
-            <Button variant="outline">Filter Bulan</Button>
+            <Button variant="outline">Filter Month</Button>
             <Button variant="outline">Filter Status</Button>
         </>
     )
@@ -145,15 +145,15 @@ export default function CapaianOutputPage() {
     return (
         <div className="flex flex-col">
             <PageHeader
-                title="Capaian Output"
-                description="Laporan capaian bulanan (omzet, volume transaksi, tenaga kerja baru)."
+                title="Output Report"
+                description="Monthly output report (revenue, transaction volume, new employees)."
                 action={actionButton}
             />
 
             <DataTable
                 columns={columns}
                 data={reports}
-                searchPlaceholder="Cari nama peserta atau bulan..."
+                searchPlaceholder="Search participant name or month..."
                 filters={filters}
             />
         </div>

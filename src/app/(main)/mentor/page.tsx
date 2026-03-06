@@ -45,7 +45,7 @@ export default function PendampingPage() {
     return (
         <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold tracking-tight">Profil Pendamping</h1>
+                <h1 className="text-3xl font-bold tracking-tight">Mentor Profile</h1>
             </div>
 
             <div className="grid gap-6 lg:grid-cols-12">
@@ -57,7 +57,7 @@ export default function PendampingPage() {
                             <AvatarFallback>RR</AvatarFallback>
                         </Avatar>
                         <h2 className="text-xl font-bold">{mockPendamping.name}</h2>
-                        <Badge variant="secondary" className="mt-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100">Pendamping Utama</Badge>
+                        <Badge variant="secondary" className="mt-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100">Senior Mentor</Badge>
 
                         <div className="w-full mt-6 space-y-4 text-sm text-left border-t pt-6">
                             <div className="flex items-center gap-3">
@@ -85,7 +85,7 @@ export default function PendampingPage() {
                     <div className="grid grid-cols-3 gap-4">
                         <Card>
                             <CardContent className="pt-6 text-center">
-                                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold">Total Peserta</p>
+                                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold">Total Participant</p>
                                 <div className="text-2xl font-bold flex items-center justify-center gap-2">
                                     <Users className="h-5 w-5 text-indigo-500" />
                                     {mockPendamping.totalParticipants}
@@ -103,7 +103,7 @@ export default function PendampingPage() {
                         </Card>
                         <Card>
                             <CardContent className="pt-6 text-center">
-                                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold">Jam Pelajaran</p>
+                                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold">Study Hours</p>
                                 <div className="text-2xl font-bold flex items-center justify-center gap-2">
                                     <Award className="h-5 w-5 text-amber-500" />
                                     {mockPendamping.jpl}
@@ -115,8 +115,8 @@ export default function PendampingPage() {
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <div>
-                                <CardTitle className="text-lg">Peserta Binaan</CardTitle>
-                                <CardDescription>Daftar peserta yang Anda dampingi.</CardDescription>
+                                <CardTitle className="text-lg">Mentored Participants</CardTitle>
+                                <CardDescription>List of participants mentored by you.</CardDescription>
                             </div>
                             <Badge variant="outline">{mockPendamping.totalParticipants} Total</Badge>
                         </CardHeader>
@@ -124,8 +124,8 @@ export default function PendampingPage() {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Nama</TableHead>
-                                        <TableHead>Sektor</TableHead>
+                                        <TableHead>Name</TableHead>
+                                        <TableHead>Sector</TableHead>
                                         <TableHead>Status</TableHead>
                                     </TableRow>
                                 </TableHeader>

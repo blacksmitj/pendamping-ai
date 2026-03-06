@@ -18,7 +18,7 @@ export async function createLogbook(data: {
     visitType: string;
     startTime: Date;
     endTime: Date;
-    jpl: number;
+    studyHours: number;
     material: string;
     summary: string;
     obstacle: string;
@@ -40,7 +40,7 @@ export async function createLogbook(data: {
             visitType: data.visitType,
             startTime: data.startTime,
             endTime: data.endTime,
-            jpl: data.jpl,
+            studyHours: data.studyHours,
             material: data.material,
             summary: data.summary,
             obstacle: data.obstacle,
@@ -49,14 +49,14 @@ export async function createLogbook(data: {
             documentationUrls: data.documentationUrls,
             expenseProofUrl: data.expenseProofUrl,
             noExpenseReason: data.noExpenseReason,
-            pendampingId: session.user.id,
+            mentorId: session.user.id,
             logbookParticipants: {
                 create: data.participantIds.map(id => ({ participantId: id }))
             }
         },
     });
 
-    revalidatePath("/logbooks");
+    revalidatePath("/logbook");
     return logbook;
 }
 
@@ -65,16 +65,16 @@ export async function submitLogbook(id: string) {
     if (!session) throw new Error("Unauthorized");
 
     await prisma.logbook.update({
-        where: { id, pendampingId: session.user.id },
+        where: { id, mentorId: session.user.id },
         data: { reviewStatus: "SUBMITTED" },
     });
 
-    revalidatePath("/logbooks");
+    revalidatePath("/logbook");
 }
 
 export async function reviewLogbook(id: string, action: "APPROVED" | "REVISION" | "REJECTED", note?: string) {
     const session = await getSession();
-    if (!session || (session.user.role !== "ADMIN_UNIV" && session.user.role !== "SUPER_ADMIN")) {
+    if (!session || (session.user.role !== "UNIVERSITY_ADMIN" && session.user.role !== "SUPER_ADMIN")) {
         throw new Error("Unauthorized");
     }
 
@@ -93,5 +93,5 @@ export async function reviewLogbook(id: string, action: "APPROVED" | "REVISION" 
         })
     ]);
 
-    revalidatePath("/logbooks");
+    revalidatePath("/logbook");
 }

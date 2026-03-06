@@ -62,9 +62,9 @@ const logbooks: LogbookEntry[] = [
 
 export default function LogbookPage() {
     const columns = [
-        { header: "Tanggal", accessor: "date" as keyof LogbookEntry, className: "font-medium" },
+        { header: "Date", accessor: "date" as keyof LogbookEntry, className: "font-medium" },
         {
-            header: "Metode",
+            header: "Method",
             accessor: "method" as keyof LogbookEntry,
             cell: (log: LogbookEntry) => (
                 <div className="flex items-center gap-2">
@@ -74,15 +74,15 @@ export default function LogbookPage() {
                         <Laptop className="h-3 w-3 text-emerald-500" />
                     )}
                     <Badge variant="secondary">
-                        {log.method === "FACE_TO_FACE" ? "Luring" : "Daring"}
+                        {log.method === "FACE_TO_FACE" ? "Face-to-Face" : "Online"}
                     </Badge>
                 </div>
             ),
         },
-        { header: "Peserta", accessor: "participantsCount" as keyof LogbookEntry },
-        { header: "Materi", accessor: "topic" as keyof LogbookEntry, className: "font-medium" },
+        { header: "Participant", accessor: "participantsCount" as keyof LogbookEntry },
+        { header: "Topic", accessor: "topic" as keyof LogbookEntry, className: "font-medium" },
         {
-            header: "Ringkasan",
+            header: "Summary",
             accessor: "summary" as keyof LogbookEntry,
             className: "max-w-[300px]",
             cell: (log: LogbookEntry) => (
@@ -92,7 +92,7 @@ export default function LogbookPage() {
             ),
         },
         {
-            header: "Aksi",
+            header: "Action",
             className: "text-right",
             cell: (log: LogbookEntry) => (
                 <DropdownMenu>
@@ -102,12 +102,12 @@ export default function LogbookPage() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+                        <DropdownMenuLabel>Action</DropdownMenuLabel>
                         <DropdownMenuItem>
                             <FileEdit className="mr-2 h-4 w-4" /> Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">
-                            <Trash2 className="mr-2 h-4 w-4" /> Hapus
+                            <Trash2 className="mr-2 h-4 w-4" /> Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -117,16 +117,16 @@ export default function LogbookPage() {
 
     const actionButton = (
         <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
-            <Link href="/logbook/buat">
-                <Plus className="mr-2 h-4 w-4" /> Buat Logbook Baru
+            <Link href="/logbook/create">
+                <Plus className="mr-2 h-4 w-4" /> Create New Logbook
             </Link>
         </Button>
     )
 
     const filters = (
         <>
-            <Button variant="outline">Filter Bulan</Button>
-            <Button variant="outline">Filter Metode</Button>
+            <Button variant="outline">Filter Month</Button>
+            <Button variant="outline">Filter Method</Button>
         </>
     )
 
@@ -134,14 +134,14 @@ export default function LogbookPage() {
         <div className="flex flex-col">
             <PageHeader
                 title="Logbook"
-                description="Daftar laporan kegiatan pendampingan harian."
+                description="List of daily mentoring activity reports."
                 action={actionButton}
             />
 
             <DataTable
                 columns={columns}
                 data={logbooks}
-                searchPlaceholder="Cari materi atau peserta..."
+                searchPlaceholder="Search topic or participant..."
                 filters={filters}
                 totalItems={34} // Mock total
             />

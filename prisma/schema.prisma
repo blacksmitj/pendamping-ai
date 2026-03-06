@@ -16,7 +16,7 @@ model User {
   email         String     @unique
   emailVerified Boolean    @default(false)
   image         String?
-  role          UserRole   @default(PENDAMPING)
+  role          UserRole   @default(MENTOR)
   status        UserStatus @default(PENDING)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
@@ -83,9 +83,9 @@ model Verification {
 // ENUMS
 // ========================
 enum UserRole {
-  PENDAMPING
-  ADMIN_UNIV
-  PENGAWAS_UNIV
+  MENTOR
+  UNIVERSITY_ADMIN
+  UNIVERSITY_SUPERVISOR
   SUPER_ADMIN
 }
 
@@ -174,18 +174,18 @@ model University {
 // ========================
 model Participant {
   id    String @id @default(cuid())
-  idTkm String @unique
+  tkmId String @unique
 
   // --- Imported from Excel ---
   // Personal Info
-  fullName         String
-  registrantNik    String?
-  birthPlace       String?
-  lastEducation    String?
-  currentActivity  String?
-  isDisabled       Boolean   @default(false)
-  disabilityType   String?
-  registrationDate DateTime?
+  fullName             String
+  registrantNationalId String?
+  birthPlace           String?
+  lastEducation        String?
+  currentActivity      String?
+  isDisabled           Boolean   @default(false)
+  disabilityType       String?
+  registrationDate     DateTime?
 
   // Contact
   whatsapp       String?
@@ -227,20 +227,20 @@ model Participant {
   productUnitPerPeriod  String?
 
   // Uploaded Documents (URLs from file storage)
-  ktpUrl                String?
+  idCardUrl             String?
   familyCardUrl         String?
   selfPhotoUrl          String?
   assistanceLetterUrl   String?
   commitmentLetterUrl   String?
   businessProfileDocUrl String?
   bmcStrategyDocUrl     String?
-  rabDocUrl             String?
+  budgetPlanUrl         String?
   developmentPlanUrl    String?
   businessVideoUrl      String?
   businessPhotoUrl      String?
   financialRecordUrl    String?
 
-  // --- Filled by Pendamping ---
+  // --- Filled by Mentor ---
   communicationStatus    String?
   fundDisbursementStatus String?
   presenceStatus         String?
@@ -269,12 +269,12 @@ model ParticipantAssignment {
   id            String      @id @default(cuid())
   participantId String
   participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
-  pendampingId  String
-  pendamping    User        @relation(fields: [pendampingId], references: [id], onDelete: Cascade)
+  mentorId      String
+  mentor        User        @relation(fields: [mentorId], references: [id], onDelete: Cascade)
 
   assignedAt DateTime @default(now())
 
-  @@unique([participantId, pendampingId])
+  @@unique([participantId, mentorId])
 }
 
 // ========================
@@ -288,7 +288,7 @@ model Logbook {
   visitType         String
   startTime         DateTime
   endTime           DateTime
-  jpl               Int            @default(0)
+  studyHours        Int            @default(0)
   material          String
   summary           String
   obstacle          String
@@ -299,8 +299,8 @@ model Logbook {
   noExpenseReason   String?
   reviewStatus      ReviewStatus   @default(DRAFT)
 
-  pendampingId        String
-  pendamping          User                 @relation(fields: [pendampingId], references: [id])
+  mentorId            String
+  mentor              User                 @relation(fields: [mentorId], references: [id])
   logbookParticipants LogbookParticipant[]
   reviews             LogbookReview[]
 
@@ -367,7 +367,7 @@ model Employee {
   output           Output  @relation(fields: [outputId], references: [id], onDelete: Cascade)
   nik              String
   name             String
-  ktpUrl           String
+  idCardUrl        String
   employmentStatus String
   hasBpjs          Boolean
   isDisabled       Boolean

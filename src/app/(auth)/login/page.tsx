@@ -52,10 +52,10 @@ export default function LoginPage() {
                 </div>
                 <div className="space-y-2">
                     <CardTitle className="text-3xl font-bold tracking-tight text-slate-900">
-                        Selamat Datang
+                        Welcome Back
                     </CardTitle>
                     <CardDescription className="text-slate-500">
-                        Masuk ke akun Anda untuk melanjutkan pendampingan.
+                        Login to your account to continue mentoring.
                     </CardDescription>
                 </div>
             </CardHeader>
@@ -68,7 +68,7 @@ export default function LoginPage() {
                         </Alert>
                     )}
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="text-slate-700 font-medium">Alamat Email</Label>
+                        <Label htmlFor="email" className="text-slate-700 font-medium">Email Address</Label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                             <Input
@@ -85,9 +85,9 @@ export default function LoginPage() {
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                            <Label htmlFor="password" className="text-slate-700 font-medium">Kata Sandi</Label>
+                            <Label htmlFor="password" className="text-slate-700 font-medium">Password</Label>
                             <Link href="#" className="text-xs font-medium text-indigo-600 hover:text-indigo-500">
-                                Lupa sandi?
+                                Forgot password?
                             </Link>
                         </div>
                         <div className="relative">
@@ -118,7 +118,7 @@ export default function LoginPage() {
                             htmlFor="remember"
                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-slate-600"
                         >
-                            Ingat saya di perangkat ini
+                            Remember me on this device
                         </label>
                     </div>
                     <Button
@@ -129,11 +129,11 @@ export default function LoginPage() {
                         {isLoading ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Memproses...
+                                Processing...
                             </>
                         ) : (
                             <>
-                                Masuk Sekarang <ArrowRight className="ml-2 h-4 w-4" />
+                                Login Now <ArrowRight className="ml-2 h-4 w-4" />
                             </>
                         )}
                     </Button>
@@ -145,13 +145,13 @@ export default function LoginPage() {
                         <span className="w-full border-t border-slate-100" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-white px-2 text-slate-400">Atau</span>
+                        <span className="bg-white px-2 text-slate-400">Or</span>
                     </div>
                 </div>
                 <p className="text-center text-sm text-slate-500">
-                    Belum punya akun?{" "}
+                    Don&apos;t have an account?{" "}
                     <Link href="/register" className="font-bold text-indigo-600 hover:text-indigo-500">
-                        Daftar Baru
+                        Register
                     </Link>
                 </p>
             </CardFooter>

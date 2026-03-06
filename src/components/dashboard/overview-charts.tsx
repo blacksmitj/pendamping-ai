@@ -18,10 +18,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRole } from "@/components/providers/role-provider"
 
 const lineData = [
-    { name: "Minggu 1", total: 4 },
-    { name: "Minggu 2", total: 7 },
-    { name: "Minggu 3", total: 5 },
-    { name: "Minggu 4", total: 10 },
+    { name: "Week 1", total: 4 },
+    { name: "Week 2", total: 7 },
+    { name: "Week 3", total: 5 },
+    { name: "Week 4", total: 10 },
 ]
 
 const universityPerformanceData = [
@@ -32,10 +32,10 @@ const universityPerformanceData = [
 ]
 
 const pieData = [
-    { name: "Kuliner", value: 400 },
+    { name: "Culinary", value: 400 },
     { name: "Fashion", value: 300 },
-    { name: "Jasa", value: 300 },
-    { name: "Kriya", value: 200 },
+    { name: "Services", value: 300 },
+    { name: "Craft", value: 200 },
 ]
 
 const COLORS = ["#4f46e5", "#10b981", "#f59e0b", "#f43f5e"]
@@ -43,9 +43,9 @@ const COLORS = ["#4f46e5", "#10b981", "#f59e0b", "#f43f5e"]
 export function OverviewCharts() {
     const { role } = useRole()
 
-    const isHighRole = role === "super_admin" || role === "pengawas"
+    const isHighRole = role === "super_admin" || role === "university_supervisor"
     const displayData = isHighRole ? universityPerformanceData : lineData
-    const chartTitle = isHighRole ? "Performa Universitas (%)" : "Grafik Logbook"
+    const chartTitle = isHighRole ? "University Performance (%)" : "Logbook Chart"
 
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
@@ -88,7 +88,7 @@ export function OverviewCharts() {
             </Card>
             <Card className="col-span-3">
                 <CardHeader>
-                    <CardTitle>Distribusi Sektor</CardTitle>
+                    <CardTitle>Sector Distribution</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="h-[300px] w-full">

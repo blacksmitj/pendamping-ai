@@ -17,7 +17,7 @@ const mockUniversity = {
     name: "Universitas Padjadjaran",
     city: "Bandung",
     address: "Jl. Dipati Ukur No. 35, Bandung",
-    status: "Aktif",
+    status: "Active",
     totalMentors: 5,
 }
 
@@ -33,7 +33,7 @@ export default function UniversitasPage() {
     return (
         <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold tracking-tight">Universitas</h1>
+                <h1 className="text-3xl font-bold tracking-tight">University</h1>
             </div>
 
             <div className="space-y-6">
@@ -54,7 +54,7 @@ export default function UniversitasPage() {
                             </CardDescription>
                         </div>
                         <div className="text-right">
-                            <p className="text-sm text-muted-foreground uppercase tracking-wider font-semibold">Total Pendamping</p>
+                            <p className="text-sm text-muted-foreground uppercase tracking-wider font-semibold">Total Mentor</p>
                             <div className="text-3xl font-bold text-indigo-600 flex items-center justify-end gap-2">
                                 <Users className="h-6 w-6" /> {mockUniversity.totalMentors}
                             </div>
@@ -64,16 +64,16 @@ export default function UniversitasPage() {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-lg">Daftar Pendamping Terkait</CardTitle>
-                        <CardDescription>Semua pendamping yang terdaftar di bawah universitas ini.</CardDescription>
+                        <CardTitle className="text-lg">Related Mentor List</CardTitle>
+                        <CardDescription>All mentors registered under this university.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Nama Pendamping</TableHead>
-                                    <TableHead>Wilayah Pendampingan</TableHead>
-                                    <TableHead className="text-center">Total Peserta</TableHead>
+                                    <TableHead>Mentor Name</TableHead>
+                                    <TableHead>Mentoring Region</TableHead>
+                                    <TableHead className="text-center">Total Participant</TableHead>
                                     <TableHead className="text-center">Total Logbook</TableHead>
                                 </TableRow>
                             </TableHeader>

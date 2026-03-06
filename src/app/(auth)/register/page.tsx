@@ -68,10 +68,10 @@ export default function RegisterPage() {
                 </div>
                 <div className="space-y-1">
                     <CardTitle className="text-3xl font-bold tracking-tight text-slate-900">
-                        Daftar Baru
+                        Register
                     </CardTitle>
                     <CardDescription className="text-slate-500">
-                        Bergabunglah sebagai mitra pendamping UMKM.
+                        Join as an MSME mentor partner.
                     </CardDescription>
                 </div>
             </CardHeader>
@@ -84,12 +84,12 @@ export default function RegisterPage() {
                         </Alert>
                     )}
                     <div className="space-y-2">
-                        <Label htmlFor="name" className="text-slate-700 font-medium">Nama Lengkap</Label>
+                        <Label htmlFor="name" className="text-slate-700 font-medium">Full Name</Label>
                         <div className="relative">
                             <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                             <Input
                                 id="name"
-                                placeholder="Masukkan nama lengkap"
+                                placeholder="Enter full name"
                                 className="pl-10 h-11 border-slate-200 focus:border-indigo-500 transition-all"
                                 required
                                 value={name}
@@ -100,7 +100,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="text-slate-700 font-medium">Alamat Email</Label>
+                        <Label htmlFor="email" className="text-slate-700 font-medium">Email Address</Label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                             <Input
@@ -118,23 +118,23 @@ export default function RegisterPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="role" className="text-slate-700 font-medium">Role Anda</Label>
+                            <Label htmlFor="role" className="text-slate-700 font-medium">Your Role</Label>
                             <Select required onValueChange={setRole} value={role} disabled={isLoading}>
                                 <SelectTrigger id="role" className="h-11 border-slate-200">
-                                    <SelectValue placeholder="Pilih Role" />
+                                    <SelectValue placeholder="Select Role" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="pendamping">Pendamping</SelectItem>
-                                    <SelectItem value="admin_univ">Admin Universitas</SelectItem>
-                                    <SelectItem value="pengawas">Pengawas</SelectItem>
+                                    <SelectItem value="mentor">Mentor</SelectItem>
+                                    <SelectItem value="university_admin">University Admin</SelectItem>
+                                    <SelectItem value="university_supervisor">Supervisor</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="univ" className="text-slate-700 font-medium">Universitas</Label>
+                            <Label htmlFor="univ" className="text-slate-700 font-medium">University</Label>
                             <Select required onValueChange={setUniversityId} value={universityId} disabled={isLoading}>
                                 <SelectTrigger id="univ" className="h-11 border-slate-200">
-                                    <SelectValue placeholder="Pilih Univ" />
+                                    <SelectValue placeholder="Select Univ" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="ui-id">Universitas Indonesia</SelectItem>
@@ -147,7 +147,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="password" className="text-slate-700 font-medium">Kata Sandi</Label>
+                        <Label htmlFor="password" className="text-slate-700 font-medium">Password</Label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                             <Input
@@ -166,7 +166,7 @@ export default function RegisterPage() {
                     <div className="flex items-start space-x-2 py-2">
                         <div className="mt-1 h-2 w-2 rounded-full bg-indigo-500" />
                         <p className="text-xs text-slate-500">
-                            Dengan mendaftar, Anda menyetujui Ketentuan Layanan dan Kebijakan Privasi kami.
+                            By registering, you agree to our Terms of Service and Privacy Policy.
                         </p>
                     </div>
 
@@ -178,11 +178,11 @@ export default function RegisterPage() {
                         {isLoading ? (
                             <>
                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Mendaftar...
+                                Registering...
                             </>
                         ) : (
                             <>
-                                Buat Akun Sekarang <ArrowRight className="ml-2 h-4 w-4" />
+                                Create Account Now <ArrowRight className="ml-2 h-4 w-4" />
                             </>
                         )}
                     </Button>
@@ -195,9 +195,9 @@ export default function RegisterPage() {
                     </div>
                 </div>
                 <p className="text-center text-sm text-slate-500">
-                    Sudah punya akun?{" "}
+                    Already have an account?{" "}
                     <Link href="/login" className="font-bold text-indigo-600 hover:text-indigo-500">
-                        Masuk Disini
+                        Login Here
                     </Link>
                 </p>
             </CardFooter>

@@ -24,13 +24,13 @@ export async function createOutput(data: any, employees: any[]) {
         },
     });
 
-    revalidatePath("/outputs");
+    revalidatePath("/output");
     return output;
 }
 
 export async function reviewOutput(id: string, action: "APPROVED" | "REVISION" | "REJECTED", note?: string) {
     const session = await getSession();
-    if (!session || (session.user.role !== "ADMIN_UNIV" && session.user.role !== "SUPER_ADMIN")) {
+    if (!session || (session.user.role !== "UNIVERSITY_ADMIN" && session.user.role !== "SUPER_ADMIN")) {
         throw new Error("Unauthorized");
     }
 
@@ -49,5 +49,5 @@ export async function reviewOutput(id: string, action: "APPROVED" | "REVISION" |
         })
     ]);
 
-    revalidatePath("/outputs");
+    revalidatePath("/output");
 }

@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 
-const steps = ["Info Dasar", "Detail Kegiatan", "Bukti & Dokumentasi"]
+const steps = ["Basic Info", "Activity Details", "Evidence & Documentation"]
 
 export default function CreateLogbookPage() {
     const router = useRouter()
@@ -35,8 +35,8 @@ export default function CreateLogbookPage() {
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Buat Logbook Baru</h1>
-                    <p className="text-muted-foreground">Catat aktivitas pendampingan harian Anda.</p>
+                    <h1 className="text-3xl font-bold tracking-tight">Create New Logbook</h1>
+                    <p className="text-muted-foreground">Record your daily mentoring activities.</p>
                 </div>
             </div>
 
@@ -77,19 +77,19 @@ export default function CreateLogbookPage() {
                         <div className="space-y-6">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label>Tanggal Kegiatan</Label>
+                                    <Label>Activity Date</Label>
                                     <Input type="date" defaultValue="2026-03-05" />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Metode Penyampaian</Label>
-                                    <RadioGroup defaultValue="luring" className="flex gap-4 pt-2">
+                                    <Label>Delivery Method</Label>
+                                    <RadioGroup defaultValue="face-to-face" className="flex gap-4 pt-2">
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="luring" id="luring" />
-                                            <Label htmlFor="luring">Luring (Tatap Muka)</Label>
+                                            <RadioGroupItem value="face-to-face" id="f2f" />
+                                            <Label htmlFor="f2f">Face-to-Face</Label>
                                         </div>
                                         <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="daring" id="daring" />
-                                            <Label htmlFor="daring">Daring</Label>
+                                            <RadioGroupItem value="online" id="online" />
+                                            <Label htmlFor="online">Online</Label>
                                         </div>
                                     </RadioGroup>
                                 </div>
@@ -97,20 +97,20 @@ export default function CreateLogbookPage() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label>Jam Mulai</Label>
+                                    <Label>Start Time</Label>
                                     <Input type="time" defaultValue="09:00" />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Jam Selesai</Label>
+                                    <Label>End Time</Label>
                                     <Input type="time" defaultValue="11:30" />
                                 </div>
                             </div>
 
                             <div className="space-y-3">
-                                <Label>Peserta yang Hadir</Label>
+                                <Label>Attendees</Label>
                                 <div className="relative">
                                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                                    <Input placeholder="Cari nama peserta..." className="pl-8" />
+                                    <Input placeholder="Search participant name..." className="pl-8" />
                                 </div>
                                 <div className="flex flex-wrap gap-2 mt-2">
                                     <Badge variant="secondary" className="pl-2 pr-1 py-1 flex items-center gap-1">
@@ -127,55 +127,55 @@ export default function CreateLogbookPage() {
                     {currentStep === 2 && (
                         <div className="space-y-6">
                             <div className="space-y-2">
-                                <Label>Materi / Topik Pembahasan</Label>
-                                <Input placeholder="Contoh: Pembuatan BMC, Analisis Pasar, dll" />
+                                <Label>Topic / Mentoring Topic</Label>
+                                <Input placeholder="e.g., BMC Creation, Market Analysis, etc." />
                             </div>
                             <div className="space-y-2">
-                                <Label>Ringkasan Kegiatan</Label>
+                                <Label>Activity Summary</Label>
                                 <Textarea
-                                    placeholder="Ceritakan apa saja yang dibahas dan dilakukan selama pendampingan..."
+                                    placeholder="Describe what was discussed and done during mentoring..."
                                     className="min-h-[120px]"
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label>Kendala yang Ditemui</Label>
-                                    <Textarea placeholder="Opsional" />
+                                    <Label>Obstacles Encountered</Label>
+                                    <Textarea placeholder="Optional" />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Solusi / Tindak Lanjut</Label>
-                                    <Textarea placeholder="Opsional" />
+                                    <Label>Solution / Follow-up</Label>
+                                    <Textarea placeholder="Optional" />
                                 </div>
                             </div>
                         </div>
                     )}
 
                     {currentStep === 3 && (
-                        <div className="space-y-6">
+                         <div className="space-y-6">
                             <div className="space-y-4">
-                                <Label>Biaya Operasional (Opsional)</Label>
+                                <Label>Operating Costs (Optional)</Label>
                                 <div className="flex items-center gap-4">
                                     <div className="flex-1 relative">
                                         <span className="absolute left-3 top-2.5 text-muted-foreground">Rp</span>
                                         <Input className="pl-10" placeholder="0" type="number" />
                                     </div>
                                     <Button variant="outline" className="shrink-0">
-                                        <Upload className="mr-2 h-4 w-4" /> Upload Bukti
+                                        <Upload className="mr-2 h-4 w-4" /> Upload Proof
                                     </Button>
                                 </div>
                                 <p className="text-xs text-muted-foreground italic select-none pointer-events-none">
-                                    *Isi jika ada pengeluaran transport atau konsumsi selama pendampingan luring.
+                                    *Fill in if there are transport or consumption expenses during off-site mentoring.
                                 </p>
                             </div>
 
                             <Separator />
 
                             <div className="space-y-4">
-                                <Label>Dokumentasi Foto (Maks 5)</Label>
+                                <Label>Photo Documentation (Max 5)</Label>
                                 <div className="grid grid-cols-4 gap-4">
                                     <div className="aspect-square rounded-lg border-2 border-dashed flex flex-col items-center justify-center gap-1 hover:bg-muted/50 cursor-pointer text-muted-foreground">
                                         <Camera className="h-6 w-6" />
-                                        <span className="text-[10px]">Pilih Foto</span>
+                                        <span className="text-[10px]">Select Photo</span>
                                     </div>
                                     <div className="aspect-square rounded-lg border bg-muted flex items-center justify-center relative group">
                                         <div className="absolute top-1 right-1 h-5 w-5 rounded-full bg-destructive text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
@@ -190,15 +190,15 @@ export default function CreateLogbookPage() {
                 </CardContent>
                 <CardFooter className="flex justify-between border-t pt-6">
                     <Button variant="ghost" onClick={handleBack} disabled={currentStep === 1}>
-                        <ChevronLeft className="mr-2 h-4 w-4" /> Sebelumnya
+                        <ChevronLeft className="mr-2 h-4 w-4" /> Previous
                     </Button>
                     {currentStep < steps.length ? (
                         <Button onClick={handleNext} className="bg-indigo-600 hover:bg-indigo-700">
-                            Selanjutnya <ChevronRight className="ml-2 h-4 w-4" />
+                            Next <ChevronRight className="ml-2 h-4 w-4" />
                         </Button>
                     ) : (
                         <Button className="bg-emerald-600 hover:bg-emerald-700">
-                            <Save className="mr-2 h-4 w-4" /> Simpan Logbook
+                            <Save className="mr-2 h-4 w-4" /> Save Logbook
                         </Button>
                     )}
                 </CardFooter>

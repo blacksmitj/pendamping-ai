@@ -13,20 +13,20 @@ export async function GET(req: NextRequest) {
     }
 
     const { searchParams } = new URL(req.url);
-    const pendampingId = searchParams.get("pendampingId");
+    const mentorId = searchParams.get("mentorId");
     const universityId = searchParams.get("universityId");
     const reviewStatus = searchParams.get("status");
 
     const logbooks = await prisma.logbook.findMany({
         where: {
-            ...(pendampingId ? { pendampingId } : {}),
+            ...(mentorId ? { mentorId } : {}),
             ...(reviewStatus ? { reviewStatus: reviewStatus as any } : {}),
             ...(universityId ? {
-                pendamping: { universityId }
+                mentor: { universityId }
             } : {}),
         },
         include: {
-            pendamping: {
+            mentor: {
                 select: { name: true, university: { select: { name: true } } }
             },
             logbookParticipants: {
