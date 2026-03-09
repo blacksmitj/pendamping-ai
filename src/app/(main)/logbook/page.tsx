@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Plus, MoreHorizontal, FileEdit, Trash2, Home, Laptop } from "lucide-react"
+import { Plus, MoreHorizontal, FileEdit, Trash2, Home, Laptop, Eye } from "lucide-react"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { PageHeader } from "@/components/page-header"
 import { DataTable } from "@/components/data-table"
+import { useQuery } from "@tanstack/react-query"
 
 type LogbookEntry = {
     id: string
@@ -25,42 +26,24 @@ type LogbookEntry = {
     summary: string
 }
 
-const logbooks: LogbookEntry[] = [
-    {
-        id: "LOG001",
-        date: "2026-03-05",
-        method: "FACE_TO_FACE",
-        participantsCount: "3 orang",
-        topic: "Business Model Canvas (BMC)",
-        summary: "Pembahasan 9 blok BMC untuk usaha kuliner...",
-    },
-    {
-        id: "LOG002",
-        date: "2026-03-03",
-        method: "ONLINE",
-        participantsCount: "1 orang",
-        topic: "Manajemen Kasir Digital",
-        summary: "Implementasi aplikasi kasir untuk pencatatan...",
-    },
-    {
-        id: "LOG003",
-        date: "2026-03-01",
-        method: "FACE_TO_FACE",
-        participantsCount: "2 orang",
-        topic: "Strategi Produk & Branding",
-        summary: "Re-design logo dan perbaikan kemasan...",
-    },
-    {
-        id: "LOG004",
-        date: "2026-02-28",
-        method: "ONLINE",
-        participantsCount: "5 orang",
-        topic: "Legalitas Usaha (NIB)",
-        summary: "Pendampingan pembuatan NIB melalui OSS...",
-    },
-]
-
 export default function LogbookPage() {
+    const { data: entries = [], isLoading } = useQuery({
+        queryKey: ["logbooks"],
+        queryFn: async () => {
+            const res = await fetch("/api/logbooks")
+            if (!res.ok) throw new Error("Gagal mengambil data logbook")
+            const data = await res.json()
+            return data.map((log: any) => ({
+                id: log.id,
+                date: new Date(log.date).toISOString().split("T")[0],
+                method: log.deliveryMethod,
+                participantsCount: `${log.logbookParticipants?.length || 0} orang`,
+                topic: log.material,
+                summary: log.summary,
+            }))
+        }
+    })
+
     const columns = [
         { header: "Date", accessor: "date" as keyof LogbookEntry, className: "font-medium" },
         {
@@ -95,25 +78,40 @@ export default function LogbookPage() {
             header: "Action",
             className: "text-right",
             cell: (log: LogbookEntry) => (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Action</DropdownMenuLabel>
-                        <DropdownMenuItem>
-                            <FileEdit className="mr-2 h-4 w-4" /> Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
-                            <Trash2 className="mr-2 h-4 w-4" /> Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex items-center justify-end gap-2">
+                    <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                        <Link href={`/logbook/${log.id}`}>
+                            <Eye className="h-4 w-4 text-indigo-600" />
+                        </Link>
+                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Action</DropdownMenuLabel>
+                            <DropdownMenuItem asChild>
+                                <Link href={`/logbook/${log.id}`}>
+                                    <Eye className="mr-2 h-4 w-4" /> View Detail
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href={`/logbook/${log.id}/edit`}>
+                                    <FileEdit className="mr-2 h-4 w-4" /> Edit
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">
+                                <Trash2 className="mr-2 h-4 w-4" /> Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             ),
         },
     ]
+
 
     const actionButton = (
         <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
@@ -140,10 +138,10 @@ export default function LogbookPage() {
 
             <DataTable
                 columns={columns}
-                data={logbooks}
+                data={entries}
                 searchPlaceholder="Search topic or participant..."
                 filters={filters}
-                totalItems={34} // Mock total
+                isLoading={isLoading}
             />
         </div>
     )

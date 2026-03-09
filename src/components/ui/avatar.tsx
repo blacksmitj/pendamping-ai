@@ -70,10 +70,17 @@ function AvatarBadge({ className, ...props }: React.ComponentProps<"span">) {
   )
 }
 
-function AvatarGroup({ className, ...props }: React.ComponentProps<"div">) {
+function AvatarGroup({
+  className,
+  size = "default",
+  ...props
+}: React.ComponentProps<"div"> & {
+  size?: "default" | "sm" | "lg"
+}) {
   return (
     <div
       data-slot="avatar-group"
+      data-size={size}
       className={cn(
         "group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background",
         className

@@ -14,49 +14,52 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { getUniversities, deleteUniversity } from "@/actions/university"
-import { getWorkspaces } from "@/actions/workspaces"
-import { UniversityDialog } from "./university-dialog"
+import { useQuery } from "@tanstack/react-query"
+import { queryKeys } from "@/lib/query-keys"
+import { UniversitySheet } from "./university-sheet"
 import { toast } from "sonner"
 import Image from "next/image"
 import { getStorageUrl } from "@/lib/storage-helper"
 
 export default function SuperUniversitasPage() {
-    const [universities, setUniversities] = React.useState<any[]>([])
-    const [workspaces, setWorkspaces] = React.useState<any[]>([])
-    const [loading, setLoading] = React.useState(true)
-    const [dialogOpen, setDialogOpen] = React.useState(false)
+    const { data: universities, isLoading: loadingUniversities, refetch: refetchUniversities } = useQuery({
+        queryKey: ["universities", "full"],
+        queryFn: async () => {
+            const res = await fetch("/api/universities")
+            if (!res.ok) throw new Error("Failed to fetch universities")
+            return res.json()
+        },
+    })
+
+    const { data: workspaces, isLoading: loadingWorkspaces, refetch: refetchWorkspaces } = useQuery({
+        queryKey: queryKeys.workspaces.all,
+        queryFn: async () => {
+            const res = await fetch("/api/workspaces")
+            if (!res.ok) throw new Error("Failed to fetch workspaces")
+            return res.json()
+        },
+    })
+
+    const loading = loadingUniversities || loadingWorkspaces
+    const [sheetOpen, setSheetOpen] = React.useState(false)
     const [selectedUniversity, setSelectedUniversity] = React.useState<any>(null)
 
     const fetchData = React.useCallback(async () => {
-        setLoading(true)
-        try {
-            const [univData, wsData] = await Promise.all([
-                getUniversities(),
-                getWorkspaces()
-            ])
-            setUniversities(univData)
-            setWorkspaces(wsData)
-        } catch (error) {
-            toast.error("Gagal mengambil data")
-        } finally {
-            setLoading(false)
-        }
-    }, [])
-
-    React.useEffect(() => {
-        fetchData()
-    }, [fetchData])
+        refetchUniversities()
+        refetchWorkspaces()
+    }, [refetchUniversities, refetchWorkspaces])
 
     const handleDelete = async (id: string) => {
         if (!confirm("Apakah Anda yakin ingin menghapus universitas ini?")) return
         try {
-            const res = await deleteUniversity(id)
-            if (res.success) {
+            const res = await fetch(`/api/universities?id=${id}`, {
+                method: "DELETE",
+            })
+            if (res.ok) {
                 toast.success("Universitas berhasil dihapus")
                 fetchData()
             } else {
-                toast.error(res.error || "Gagal menghapus")
+                toast.error("Gagal menghapus")
             }
         } catch (error) {
             toast.error("Terjadi kesalahan")
@@ -71,7 +74,7 @@ export default function SuperUniversitasPage() {
                 <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-lg bg-slate-50 border flex items-center justify-center overflow-hidden flex-shrink-0">
                         {item.logoUrl ? (
-                            <Image src={getStorageUrl(item.logoUrl)} alt={item.name} width={40} height={40} className="object-contain" />
+                            <Image src={getStorageUrl(item.logoUrl)} alt={item.name} width={40} height={40} className="object-contain" unoptimized />
                         ) : (
                             <Building2 className="h-5 w-5 text-slate-400" />
                         )}
@@ -125,7 +128,7 @@ export default function SuperUniversitasPage() {
                         <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => {
                             setSelectedUniversity(item)
-                            setDialogOpen(true)
+                            setSheetOpen(true)
                         }}>
                             <Edit className="mr-2 h-4 w-4" /> Edit Data
                         </DropdownMenuItem>
@@ -146,11 +149,11 @@ export default function SuperUniversitasPage() {
                     title="Manajemen Universitas"
                     description="Daftarkan dan kelola mitra universitas pelaksana program Pendampingan."
                 />
-                <Button 
+                <Button
                     className="bg-indigo-600 hover:bg-indigo-700"
                     onClick={() => {
                         setSelectedUniversity(null)
-                        setDialogOpen(true)
+                        setSheetOpen(true)
                     }}
                 >
                     <Plus className="mr-2 h-4 w-4" /> Tambah Universitas
@@ -159,14 +162,14 @@ export default function SuperUniversitasPage() {
 
             <DataTable
                 columns={columns}
-                data={universities}
+                data={universities || []}
                 isLoading={loading}
                 searchPlaceholder="Cari universitas atau wilayah..."
             />
 
-            <UniversityDialog
-                open={dialogOpen}
-                onOpenChange={setDialogOpen}
+            <UniversitySheet
+                open={sheetOpen}
+                onOpenChange={setSheetOpen}
                 university={selectedUniversity}
                 workspaces={workspaces}
                 onSuccess={fetchData}

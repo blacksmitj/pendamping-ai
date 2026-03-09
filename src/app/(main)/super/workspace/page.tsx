@@ -7,21 +7,24 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Plus, Calendar, Briefcase, ChevronRight, Settings2, FileUp, Edit } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ImportDialog } from "@/components/participants/import-dialog"
-import { WorkspaceDialog } from "@/components/super/workspace-dialog"
-import { getWorkspaces } from "@/actions/workspaces"
+import { ImportSheet } from "@/components/participants/import-sheet"
+import { WorkspaceSheet } from "@/components/super/workspace-sheet"
 import { useQuery } from "@tanstack/react-query"
 import { queryKeys } from "@/lib/query-keys"
 
 export default function SuperWorkspacePage() {
     const [importOpen, setImportOpen] = React.useState(false)
-    const [workspaceDialogOpen, setWorkspaceDialogOpen] = React.useState(false)
+    const [workspaceSheetOpen, setWorkspaceSheetOpen] = React.useState(false)
     const [selectedWorkspace, setSelectedWorkspace] = React.useState<any | null>(null)
     const [editWorkspace, setEditWorkspace] = React.useState<any | null>(null)
 
     const { data: workspaces, isLoading, refetch } = useQuery({
         queryKey: queryKeys.workspaces.all,
-        queryFn: () => getWorkspaces(),
+        queryFn: async () => {
+            const res = await fetch("/api/workspaces")
+            if (!res.ok) throw new Error("Failed to fetch workspaces")
+            return res.json()
+        },
     })
 
     const handleOpenImport = (workspace: any) => {
@@ -31,12 +34,12 @@ export default function SuperWorkspacePage() {
 
     const handleCreateNew = () => {
         setEditWorkspace(null)
-        setWorkspaceDialogOpen(true)
+        setWorkspaceSheetOpen(true)
     }
 
     const handleEdit = (workspace: any) => {
         setEditWorkspace(workspace)
-        setWorkspaceDialogOpen(true)
+        setWorkspaceSheetOpen(true)
     }
 
     const columns: any[] = [
@@ -82,7 +85,7 @@ export default function SuperWorkspacePage() {
                 const statusLabel = item.status === "ACTIVE" ? "Aktif" : item.status === "COMPLETED" ? "Selesai" : "Arsip";
                 const variant = item.status === "ACTIVE" ? "default" : "secondary";
                 const className = item.status === "ACTIVE" ? "bg-emerald-500" : "";
-                
+
                 return (
                     <Badge variant={variant} className={className}>
                         {statusLabel}
@@ -146,7 +149,7 @@ export default function SuperWorkspacePage() {
             </Card>
 
             {selectedWorkspace && (
-                <ImportDialog
+                <ImportSheet
                     open={importOpen}
                     onOpenChange={setImportOpen}
                     workspaceId={selectedWorkspace.id}
@@ -155,10 +158,10 @@ export default function SuperWorkspacePage() {
                 />
             )}
 
-            <WorkspaceDialog
-                open={workspaceDialogOpen}
+            <WorkspaceSheet
+                open={workspaceSheetOpen}
                 onOpenChange={(open) => {
-                    setWorkspaceDialogOpen(open)
+                    setWorkspaceSheetOpen(open)
                     if (!open) refetch()
                 }}
                 workspace={editWorkspace}

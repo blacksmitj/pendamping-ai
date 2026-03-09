@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Camera, User as UserIcon, Loader2 } from "lucide-react"
 import { useSession } from "@/lib/auth-client"
-import { updateProfile } from "@/actions/users"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { getStorageUrl } from "@/lib/storage-helper"
@@ -28,12 +27,23 @@ export function ProfileTab() {
     }, [session])
 
     const updateProfileMutation = useMutation({
-        mutationFn: updateProfile,
+        mutationFn: async (data: any) => {
+            const res = await fetch("/api/account?action=profile", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            })
+            if (!res.ok) {
+                const errorText = await res.text()
+                throw new Error(errorText || "Gagal memperbarui profil")
+            }
+            return res.text()
+        },
         onSuccess: () => {
             toast.success("Profil berhasil diperbarui")
             queryClient.invalidateQueries({ queryKey: ["session"] })
         },
-        onError: (error) => {
+        onError: (error: any) => {
             toast.error(error.message || "Gagal memperbarui profil")
         }
     })
@@ -41,7 +51,16 @@ export function ProfileTab() {
     const uploadAvatarMutation = useMutation({
         mutationFn: async (file: File) => {
             const path = await uploadFileToMinio(file, "avatar")
-            return updateProfile({ name: session?.user?.name || "", image: path })
+            const res = await fetch("/api/account?action=profile", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: session?.user?.name || "", image: path }),
+            })
+            if (!res.ok) {
+                const errorText = await res.text()
+                throw new Error(errorText || "Gagal memperbarui profil")
+            }
+            return res.text()
         },
         onSuccess: () => {
             toast.success("Foto profil berhasil diperbarui")
@@ -85,17 +104,17 @@ export function ProfileTab() {
                                 {session?.user?.name?.substring(0, 2).toUpperCase() || "U"}
                             </AvatarFallback>
                         </Avatar>
-                        <div 
+                        <div
                             className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                             onClick={() => fileInputRef.current?.click()}
                         >
                             <Camera className="text-white h-6 w-6" />
                         </div>
-                        <input 
-                            type="file" 
-                            ref={fileInputRef} 
-                            className="hidden" 
-                            accept="image/*" 
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            className="hidden"
+                            accept="image/*"
                             onChange={handleFileChange}
                         />
                     </div>
@@ -103,9 +122,9 @@ export function ProfileTab() {
                         <h3 className="text-xl font-bold text-slate-900">{session?.user?.name}</h3>
                         <p className="text-sm text-slate-500">{session?.user?.email}</p>
                         <p className="text-xs uppercase tracking-wider font-semibold text-indigo-600 mt-1">{(session?.user as any)?.role?.replace("_", " ")}</p>
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
+                        <Button
+                            variant="outline"
+                            size="sm"
                             className="mt-3 text-xs h-8"
                             onClick={() => fileInputRef.current?.click()}
                             disabled={uploadAvatarMutation.isPending}
@@ -119,10 +138,10 @@ export function ProfileTab() {
                 <div className="grid gap-6 sm:grid-cols-2">
                     <div className="space-y-2">
                         <Label htmlFor="name" className="text-sm font-semibold">Nama Lengkap</Label>
-                        <Input 
-                            id="name" 
-                            value={name} 
-                            onChange={(e) => setName(e.target.value)} 
+                        <Input
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             className="focus-visible:ring-indigo-500"
                         />
                     </div>
@@ -134,8 +153,8 @@ export function ProfileTab() {
                 </div>
             </CardContent>
             <CardFooter className="justify-end bg-slate-50/50 border-t px-6 py-4">
-                <Button 
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm" 
+                <Button
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
                     onClick={handleSave}
                     disabled={updateProfileMutation.isPending || name === session?.user?.name}
                 >

@@ -11,12 +11,13 @@ import {
     CardContent,
 } from "@/components/ui/card"
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+    SheetFooter,
+} from "@/components/ui/sheet"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -91,17 +92,17 @@ export default function PengawasLogbookPage() {
                     <Button variant="ghost" size="icon" className="h-8 w-8 text-indigo-600">
                         <Eye className="h-4 w-4" />
                     </Button>
-                    <Dialog>
-                        <DialogTrigger asChild>
+                    <Sheet>
+                        <SheetTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-indigo-600">
                                 <MessageSquare className="h-4 w-4" />
                             </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-md">
-                            <DialogHeader>
-                                <DialogTitle>Pesan Monitor - {item.university}</DialogTitle>
-                            </DialogHeader>
-                            <div className="space-y-4 py-4">
+                        </SheetTrigger>
+                        <SheetContent className="max-w-md w-full p-0 flex flex-col">
+                            <SheetHeader>
+                                <SheetTitle>Pesan Monitor - {item.university}</SheetTitle>
+                            </SheetHeader>
+                            <div className="flex-1 overflow-y-auto p-4 space-y-4">
                                 <ScrollArea className="h-[200px] border rounded-lg p-4 bg-slate-50">
                                     <div className="space-y-3">
                                         <div className="flex flex-col gap-1">
@@ -123,11 +124,11 @@ export default function PengawasLogbookPage() {
                                     <Textarea id="message" placeholder="Ketik pesan untuk Admin Universitas..." />
                                 </div>
                             </div>
-                            <div className="flex justify-end gap-2">
+                            <SheetFooter className="border-t">
                                 <Button className="bg-indigo-600 hover:bg-indigo-700">Kirim Pesan</Button>
-                            </div>
-                        </DialogContent>
-                    </Dialog>
+                            </SheetFooter>
+                        </SheetContent>
+                    </Sheet>
                 </div>
             )
         }

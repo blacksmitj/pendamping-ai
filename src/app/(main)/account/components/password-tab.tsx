@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Lock, AlertCircle, Loader2, CheckCircle2 } from "lucide-react"
-import { changeUserPassword } from "@/actions/users"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
@@ -16,21 +15,32 @@ export function PasswordTab() {
     const [confirmPassword, setConfirmPassword] = React.useState("")
 
     const changePasswordMutation = useMutation({
-        mutationFn: changeUserPassword,
+        mutationFn: async (data: any) => {
+            const res = await fetch("/api/account?action=password", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            })
+            if (!res.ok) {
+                const errorText = await res.text()
+                throw new Error(errorText || "Gagal mengubah kata sandi")
+            }
+            return res.text()
+        },
         onSuccess: () => {
             toast.success("Kata sandi berhasil diubah")
             setCurrentPassword("")
             setNewPassword("")
             setConfirmPassword("")
         },
-        onError: (error) => {
+        onError: (error: any) => {
             toast.error(error.message || "Gagal mengubah kata sandi")
         }
     })
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        
+
         if (newPassword !== confirmPassword) {
             toast.error("Konfirmasi password tidak cocok")
             return
@@ -60,9 +70,9 @@ export function PasswordTab() {
                     <div className="grid gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="oldPass" className="text-sm font-semibold">Password Saat Ini</Label>
-                            <Input 
-                                id="oldPass" 
-                                type="password" 
+                            <Input
+                                id="oldPass"
+                                type="password"
                                 value={currentPassword}
                                 onChange={(e) => setCurrentPassword(e.target.value)}
                                 required
@@ -72,8 +82,8 @@ export function PasswordTab() {
                         <div className="grid gap-4 sm:grid-cols-2">
                             <div className="space-y-2">
                                 <Label htmlFor="newPass" className="text-sm font-semibold">Password Baru</Label>
-                                <Input 
-                                    id="newPass" 
+                                <Input
+                                    id="newPass"
                                     type="password"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
@@ -83,8 +93,8 @@ export function PasswordTab() {
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="confirmPass" className="text-sm font-semibold">Konfirmasi Password Baru</Label>
-                                <Input 
-                                    id="confirmPass" 
+                                <Input
+                                    id="confirmPass"
                                     type="password"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -105,7 +115,7 @@ export function PasswordTab() {
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div className="p-4 rounded-xl border border-slate-100 bg-slate-50/50 space-y-2">
                             <p className="text-xs font-bold text-slate-700">Persyaratan Password:</p>
                             <ul className="space-y-1.5">
@@ -122,9 +132,9 @@ export function PasswordTab() {
                     </div>
                 </CardContent>
                 <CardFooter className="justify-end bg-slate-50/50 border-t px-6 py-4">
-                    <Button 
+                    <Button
                         type="submit"
-                        variant="outline" 
+                        variant="outline"
                         className="text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700 font-semibold"
                         disabled={isPending}
                     >

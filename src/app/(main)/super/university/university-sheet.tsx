@@ -5,12 +5,12 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-} from "@/components/ui/dialog"
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetFooter,
+} from "@/components/ui/sheet"
 import {
     Field,
     FieldLabel,
@@ -26,7 +26,6 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Building2, Upload, X, Loader2 } from "lucide-react"
-import { createUniversity, updateUniversity } from "@/actions/university"
 import { uploadFileToMinio } from "@/lib/storage-client"
 import { getStorageUrl } from "@/lib/storage-helper"
 import { toast } from "sonner"
@@ -45,7 +44,7 @@ const universitySchema = z.object({
 
 type UniversityFormValues = z.infer<typeof universitySchema>
 
-interface UniversityDialogProps {
+interface UniversitySheetProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     university?: any
@@ -53,13 +52,13 @@ interface UniversityDialogProps {
     onSuccess: () => void
 }
 
-export function UniversityDialog({
+export function UniversitySheet({
     open,
     onOpenChange,
     university,
     workspaces,
     onSuccess
-}: UniversityDialogProps) {
+}: UniversitySheetProps) {
     const [isUploading, setIsUploading] = React.useState(false)
     const [logoPreview, setLogoPreview] = React.useState<string | null>(university?.logoUrl ? getStorageUrl(university.logoUrl) : null)
     const [submitting, setSubmitting] = React.useState(false)
@@ -73,7 +72,7 @@ export function UniversityDialog({
             address: university?.address || "",
             province: university?.province || "",
             logoUrl: university?.logoUrl || "",
-            workspaceId: university?.workspaceId || (workspaces.length > 0 ? workspaces[0].id : ""),
+            workspaceId: university?.workspaceId || (workspaces?.length > 0 ? workspaces[0].id : ""),
             status: university?.status || "ACTIVE",
         }
     })
@@ -87,7 +86,7 @@ export function UniversityDialog({
                 address: university?.address || "",
                 province: university?.province || "",
                 logoUrl: university?.logoUrl || "",
-                workspaceId: university?.workspaceId || (workspaces.length > 0 ? workspaces[0].id : ""),
+                workspaceId: university?.workspaceId || (workspaces?.length > 0 ? workspaces[0].id : ""),
                 status: university?.status || "ACTIVE",
             })
             setLogoPreview(university?.logoUrl ? getStorageUrl(university.logoUrl) : null)
@@ -115,18 +114,27 @@ export function UniversityDialog({
         setSubmitting(true)
         try {
             if (university) {
-                const res = await updateUniversity(university.id, values)
-                if (res.success) {
+                const res = await fetch(`/api/universities?id=${university.id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(values),
+                })
+                if (res.ok) {
                     toast.success("Universitas berhasil diperbarui")
                 } else {
-                    toast.error(res.error || "Gagal memperbarui universitas")
+                    const errorText = await res.text();
+                    toast.error(`Gagal memperbarui: ${errorText}`)
                 }
             } else {
-                const res = await createUniversity(values)
-                if (res.success) {
+                const res = await fetch("/api/universities", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(values),
+                })
+                if (res.ok) {
                     toast.success("Universitas berhasil ditambahkan")
                 } else {
-                    toast.error(res.error || "Gagal menambahkan universitas")
+                    toast.error("Gagal menambahkan universitas")
                 }
             }
             onSuccess()
@@ -139,13 +147,14 @@ export function UniversityDialog({
     }
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px]">
-                <DialogHeader>
-                    <DialogTitle>{university ? "Edit Universitas" : "Tambah Universitas"}</DialogTitle>
-                </DialogHeader>
+        <Sheet open={open} onOpenChange={onOpenChange}>
+            <SheetContent className="sm:max-w-[500px] w-full p-0 flex flex-col">
+                <SheetHeader>
+                    <SheetTitle>{university ? "Edit Universitas" : "Tambah Universitas"}</SheetTitle>
+                </SheetHeader>
 
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 flex flex-col overflow-hidden">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
                         <div className="flex flex-col items-center gap-4 mb-4">
                             <div className="relative h-24 w-24 rounded-lg border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden bg-slate-50">
                                 {logoPreview ? (
@@ -154,6 +163,7 @@ export function UniversityDialog({
                                             src={logoPreview}
                                             alt="Logo Preview"
                                             fill
+                                            unoptimized
                                             className="object-contain p-2"
                                         />
                                         <button
@@ -248,7 +258,7 @@ export function UniversityDialog({
                                             <SelectValue placeholder="Pilih workspace" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {workspaces.map((ws) => (
+                                            {(workspaces || []).map((ws) => (
                                                 <SelectItem key={ws.id} value={ws.id}>
                                                     {ws.name}
                                                 </SelectItem>
@@ -296,18 +306,19 @@ export function UniversityDialog({
                                 </Field>
                             )}
                         />
+                    </div>
 
-                        <DialogFooter className="pt-4">
-                            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                                Batal
-                            </Button>
-                            <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700" disabled={submitting || isUploading}>
-                                {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                {university ? "Simpan Perubahan" : "Tambah Universitas"}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-            </DialogContent>
-        </Dialog>
+                    <SheetFooter className="border-t">
+                        <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                            Batal
+                        </Button>
+                        <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700" disabled={submitting || isUploading}>
+                            {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {university ? "Simpan Perubahan" : "Tambah Universitas"}
+                        </Button>
+                    </SheetFooter>
+                </form>
+            </SheetContent>
+        </Sheet>
     )
 }

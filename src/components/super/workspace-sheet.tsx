@@ -2,21 +2,20 @@
 
 import * as React from "react"
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-} from "@/components/ui/dialog"
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetFooter,
+} from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2, Plus, Save } from "lucide-react"
-import { createWorkspace, updateWorkspace } from "@/actions/workspaces"
 
-interface WorkspaceDialogProps {
+interface WorkspaceSheetProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     workspace?: {
@@ -28,11 +27,11 @@ interface WorkspaceDialogProps {
     }
 }
 
-export function WorkspaceDialog({
+export function WorkspaceSheet({
     open,
     onOpenChange,
     workspace
-}: WorkspaceDialogProps) {
+}: WorkspaceSheetProps) {
     const [isSaving, setIsSaving] = React.useState(false)
     const [formData, setFormData] = React.useState({
         name: "",
@@ -63,7 +62,7 @@ export function WorkspaceDialog({
         e.preventDefault()
         try {
             setIsSaving(true)
-            
+
             const data = {
                 name: formData.name,
                 startDate: new Date(formData.startDate),
@@ -72,9 +71,17 @@ export function WorkspaceDialog({
             }
 
             if (workspace) {
-                await updateWorkspace(workspace.id, data)
+                await fetch(`/api/workspaces?id=${workspace.id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                })
             } else {
-                await createWorkspace(data)
+                await fetch("/api/workspaces", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                })
             }
 
             onOpenChange(false)
@@ -86,20 +93,20 @@ export function WorkspaceDialog({
     }
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[425px]">
-                <form onSubmit={handleSave}>
-                    <DialogHeader>
-                        <DialogTitle>{workspace ? "Edit Workspace" : "Workspace Baru"}</DialogTitle>
-                        <DialogDescription>
-                            {workspace 
-                                ? "Perbarui informasi workspace yang sudah ada." 
+        <Sheet open={open} onOpenChange={onOpenChange}>
+            <SheetContent className="sm:max-w-[425px] w-full p-0 flex flex-col">
+                <form onSubmit={handleSave} className="flex flex-col h-full">
+                    <SheetHeader>
+                        <SheetTitle>{workspace ? "Edit Workspace" : "Workspace Baru"}</SheetTitle>
+                        <SheetDescription>
+                            {workspace
+                                ? "Perbarui informasi workspace yang sudah ada."
                                 : "Buat workspace baru untuk periode pendampingan mendatang."
                             }
-                        </DialogDescription>
-                    </DialogHeader>
+                        </SheetDescription>
+                    </SheetHeader>
 
-                    <div className="grid gap-4 py-4">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
                         <div className="grid gap-2">
                             <Label htmlFor="name">Nama Workspace</Label>
                             <Input
@@ -143,7 +150,7 @@ export function WorkspaceDialog({
                         </div>
                     </div>
 
-                    <DialogFooter>
+                    <SheetFooter className="border-t">
                         <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSaving}>
                             Batal
                         </Button>
@@ -160,9 +167,9 @@ export function WorkspaceDialog({
                                 </>
                             )}
                         </Button>
-                    </DialogFooter>
+                    </SheetFooter>
                 </form>
-            </DialogContent>
-        </Dialog>
+            </SheetContent>
+        </Sheet>
     )
 }

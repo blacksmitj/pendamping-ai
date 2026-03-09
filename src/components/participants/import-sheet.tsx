@@ -3,20 +3,20 @@
 import * as React from "react"
 import * as XLSX from "xlsx"
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-} from "@/components/ui/dialog"
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetFooter,
+} from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { FileUp, FileCheck, Loader2, AlertCircle, CheckCircle2 } from "lucide-react"
 
-interface ImportDialogProps {
+interface ImportSheetProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     workspaceId: string
@@ -24,13 +24,13 @@ interface ImportDialogProps {
     onSuccess?: () => void
 }
 
-export function ImportDialog({
+export function ImportSheet({
     open,
     onOpenChange,
     workspaceId,
     workspaceName,
     onSuccess
-}: ImportDialogProps) {
+}: ImportSheetProps) {
     const [file, setFile] = React.useState<File | null>(null)
     const [isImporting, setIsImporting] = React.useState(false)
     const [progress, setProgress] = React.useState(0)
@@ -61,7 +61,7 @@ export function ImportDialog({
 
             const worksheet = workbook.Sheets[workbook.SheetNames[0]]
             const jsonData = XLSX.utils.sheet_to_json(worksheet)
-            
+
             if (jsonData.length === 0) {
                 throw new Error("File Excel kosong atau tidak valid.")
             }
@@ -91,7 +91,7 @@ export function ImportDialog({
             setImportedCount(result.count)
             setStatus("success")
             setProgress(100)
-            
+
             if (onSuccess) onSuccess()
         } catch (error: any) {
             console.error("Import error:", error)
@@ -118,16 +118,16 @@ export function ImportDialog({
     }, [open])
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>Import Peserta</DialogTitle>
-                    <DialogDescription>
+        <Sheet open={open} onOpenChange={onOpenChange}>
+            <SheetContent className="sm:max-w-[425px] w-full p-0 flex flex-col">
+                <SheetHeader>
+                    <SheetTitle>Import Peserta</SheetTitle>
+                    <SheetDescription>
                         Unggah file Excel daftar peserta untuk workspace <strong>{workspaceName}</strong>.
-                    </DialogDescription>
-                </DialogHeader>
+                    </SheetDescription>
+                </SheetHeader>
 
-                <div className="grid gap-4 py-4">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
                     {status === "idle" && (
                         <div className="grid gap-2">
                             <Label htmlFor="excel-file" className="text-sm font-medium">
@@ -181,7 +181,7 @@ export function ImportDialog({
                     )}
                 </div>
 
-                <DialogFooter>
+                <SheetFooter className="border-t">
                     {status === "success" ? (
                         <Button onClick={() => onOpenChange(false)} className="bg-emerald-600 hover:bg-emerald-700">
                             Tutup
@@ -191,8 +191,8 @@ export function ImportDialog({
                             <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isImporting}>
                                 Batal
                             </Button>
-                            <Button 
-                                onClick={handleImport} 
+                            <Button
+                                onClick={handleImport}
                                 disabled={!file || isImporting}
                                 className="bg-indigo-600 hover:bg-indigo-700"
                             >
@@ -210,9 +210,9 @@ export function ImportDialog({
                             </Button>
                         </>
                     )}
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+                </SheetFooter>
+            </SheetContent>
+        </Sheet>
     )
 }
 

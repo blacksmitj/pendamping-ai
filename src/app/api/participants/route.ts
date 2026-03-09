@@ -16,6 +16,8 @@ export async function GET(req: NextRequest) {
     const universityId = searchParams.get("universityId");
     const workspaceId = searchParams.get("workspaceId");
     const status = searchParams.get("status");
+    const mentorId = searchParams.get("mentorId");
+    const tkmIds = searchParams.get("tkmIds")?.split(",");
     const query = searchParams.get("q");
 
     const participants = await prisma.participant.findMany({
@@ -23,10 +25,17 @@ export async function GET(req: NextRequest) {
             ...(universityId ? { universityId } : {}),
             ...(workspaceId ? { workspaceId } : {}),
             ...(status ? { status } : {}),
+            ...(tkmIds ? { tkmId: { in: tkmIds } } : {}),
+            ...(mentorId ? {
+                assignments: {
+                    some: { mentorId }
+                }
+            } : {}),
+            ...(searchParams.get("unassigned") === "true" ? { assignments: { none: {} } } : {}),
             ...(query ? {
                 OR: [
                     { fullName: { contains: query, mode: "insensitive" } },
-                    { idTkm: { contains: query, mode: "insensitive" } },
+                    { tkmId: { contains: query, mode: "insensitive" } },
                 ]
             } : {}),
         },

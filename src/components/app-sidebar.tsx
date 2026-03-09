@@ -70,7 +70,7 @@ const menus = {
             title: "Review",
             items: [
                 { title: "Logbook Review", url: "/admin/logbook-review", icon: CheckSquare },
-                { title: "Output Review", url: "/admin/output-review", icon: ClipboardCheck },
+                { title: "Output Review", url: "/admin/capaian-review", icon: ClipboardCheck },
             ],
         },
         {

@@ -8,7 +8,7 @@ export const minioClient = new Minio.Client({
     secretKey: process.env.MINIO_ROOT_PASSWORD || "minioadmin",
 });
 
-export const BUCKET_NAME = "pendamping-ai";
+export const BUCKET_NAME = process.env.MINIO_BUCKET_NAME || "pendamping-ai";
 
 export const FOLDERS = {
     AVATAR: "avatar/",
@@ -33,11 +33,11 @@ export async function ensureBucket() {
  */
 export async function uploadFile(fileName: string, buffer: Buffer, contentType?: string) {
     await ensureBucket();
-    
+
     await minioClient.putObject(BUCKET_NAME, fileName, buffer, buffer.length, {
         "Content-Type": contentType || "application/octet-stream"
     });
-    
+
     // Return the relative path (folder/filename) to be saved in the database
     return fileName;
 }

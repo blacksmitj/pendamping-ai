@@ -111,7 +111,6 @@ const mockCapaian = [
     { id: "C003", month: "Bulan 3", date: "2026-04-01", revenue: 8500000, volume: 180, workers: 4, status: "Pending" },
 ]
 
-import { updateParticipantMentoringStatus } from "@/actions/participants"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 
@@ -133,7 +132,13 @@ export default function ParticipantDetailClient({
 
     const updateStatusMutation = useMutation({
         mutationFn: async () => {
-            return await updateParticipantMentoringStatus(id, statusData)
+            const res = await fetch(`/api/participants/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(statusData),
+            })
+            if (!res.ok) throw new Error("Gagal memperbarui status")
+            return res.json()
         },
         onSuccess: () => {
             toast.success("Status berhasil diperbarui")
@@ -426,7 +431,7 @@ export default function ParticipantDetailClient({
                                                     {log.deliveryMethod === 'FACE_TO_FACE' ? 'Face-to-Face' : 'Online'}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell className="text-slate-500 font-mono text-xs">{new Date(log.startTime).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})} - {new Date(log.endTime).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}</TableCell>
+                                            <TableCell className="text-slate-500 font-mono text-xs">{new Date(log.startTime).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} - {new Date(log.endTime).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</TableCell>
                                             <TableCell className="text-right">
                                                 <Button variant="ghost" size="icon" className="h-8 w-8 text-indigo-600" onClick={() => router.push(`/logbook/${log.id}`)}>
                                                     <Eye className="h-4 w-4" />
@@ -548,7 +553,7 @@ export default function ParticipantDetailClient({
                                     <Label className="text-sm font-bold flex items-center gap-2">
                                         <MessageCircle className="h-4 w-4 text-slate-400" /> Communication Status
                                     </Label>
-                                    <RadioGroup value={statusData.communicationStatus} onValueChange={(val) => setStatusData({...statusData, communicationStatus: val})} className="space-y-2">
+                                    <RadioGroup value={statusData.communicationStatus} onValueChange={(val) => setStatusData({ ...statusData, communicationStatus: val })} className="space-y-2">
                                         <div className="flex items-center space-x-2 p-2 border rounded-lg hover:bg-slate-50 transition-colors">
                                             <RadioGroupItem value="smooth" id="l1" />
                                             <Label htmlFor="l1" className="flex-1 cursor-pointer">Smooth & Responsive</Label>
@@ -568,7 +573,7 @@ export default function ParticipantDetailClient({
                                     <Label className="text-sm font-bold flex items-center gap-2">
                                         <CreditCard className="h-4 w-4 text-slate-400" /> Disbursement Status
                                     </Label>
-                                    <Select value={statusData.fundDisbursementStatus} onValueChange={(val) => setStatusData({...statusData, fundDisbursementStatus: val})}>
+                                    <Select value={statusData.fundDisbursementStatus} onValueChange={(val) => setStatusData({ ...statusData, fundDisbursementStatus: val })}>
                                         <SelectTrigger className="h-11">
                                             <SelectValue placeholder="Select Stage" />
                                         </SelectTrigger>
@@ -586,12 +591,12 @@ export default function ParticipantDetailClient({
                                     </Label>
                                     <div className="flex items-center space-x-2">
                                         <Label htmlFor="drop" className="flex-1 text-slate-600">This participant dropped / withdrew</Label>
-                                        <Input type="checkbox" id="drop" checked={statusData.status === 'drop'} onChange={(e) => setStatusData({...statusData, status: e.target.checked ? 'drop' : 'active'})} className="h-5 w-5 rounded-md border-slate-300" />
+                                        <Input type="checkbox" id="drop" checked={statusData.status === 'drop'} onChange={(e) => setStatusData({ ...statusData, status: e.target.checked ? 'drop' : 'active' })} className="h-5 w-5 rounded-md border-slate-300" />
                                     </div>
                                     <Separator />
                                     <div className="space-y-2">
                                         <Label className="text-xs">Reason for Dropping (If Any)</Label>
-                                        <Input placeholder="Write reason if participant drops..." value={statusData.dropReason} onChange={(e) => setStatusData({...statusData, dropReason: e.target.value})} disabled={statusData.status !== 'drop'} />
+                                        <Input placeholder="Write reason if participant drops..." value={statusData.dropReason} onChange={(e) => setStatusData({ ...statusData, dropReason: e.target.value })} disabled={statusData.status !== 'drop'} />
                                     </div>
                                 </div>
                             </div>

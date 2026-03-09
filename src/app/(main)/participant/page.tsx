@@ -7,14 +7,14 @@ import { FileUp, MoreHorizontal, Eye, UserX, UserCheck, Loader2 } from "lucide-r
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogFooter,
-} from "@/components/ui/dialog"
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+    SheetFooter,
+} from "@/components/ui/sheet"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { PageHeader } from "@/components/page-header"
 import { DataTable } from "@/components/data-table"
-import { getParticipants } from "@/actions/participants"
+import { useQuery } from "@tanstack/react-query"
 
 type Participant = {
     id: string
@@ -38,28 +38,23 @@ type Participant = {
 
 export default function ParticipantsPage() {
     const router = useRouter()
-    const [participants, setParticipants] = React.useState<Participant[]>([])
-    const [loading, setLoading] = React.useState(true)
 
-    React.useEffect(() => {
-        const fetchParticipants = async () => {
-            try {
-                const data = await getParticipants()
-                const mapped = data.map(p => ({
-                    id: p.id,
-                    tkmId: p.tkmId,
-                    name: p.fullName,
-                    sector: p.businessSector || "-",
-                    city: p.businessCity || "-",
-                    status: p.status === "active" ? "Active" : "Dropped",
-                }))
-                setParticipants(mapped)
-            } finally {
-                setLoading(false)
-            }
+    const { data: participants = [], isLoading: loading } = useQuery({
+        queryKey: ["participants"],
+        queryFn: async () => {
+            const res = await fetch("/api/participants")
+            if (!res.ok) throw new Error("Gagal mengambil data peserta")
+            const data = await res.json()
+            return data.map((p: any) => ({
+                id: p.id,
+                tkmId: p.tkmId,
+                name: p.fullName,
+                sector: p.businessSector || "-",
+                city: p.businessCity || "-",
+                status: p.status === "active" ? "Active" : "Dropped",
+            }))
         }
-        fetchParticipants()
-    }, [])
+    })
 
     const columns = [
         { header: "TKM ID", accessor: "tkmId" as keyof Participant, className: "w-[120px] font-medium" },
@@ -113,20 +108,20 @@ export default function ParticipantsPage() {
     ]
 
     const actionButton = (
-        <Dialog>
-            <DialogTrigger asChild>
+        <Sheet>
+            <SheetTrigger asChild>
                 <Button className="bg-indigo-600 hover:bg-indigo-700">
                     <FileUp className="mr-2 h-4 w-4" /> Import Excel
                 </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
-                <DialogHeader>
-                    <DialogTitle>Import Participant Data</DialogTitle>
-                    <DialogDescription>
+            </SheetTrigger>
+            <SheetContent className="sm:max-w-[500px] w-full p-0 flex flex-col">
+                <SheetHeader>
+                    <SheetTitle>Import Participant Data</SheetTitle>
+                    <SheetDescription>
                         Upload Excel file (.xlsx or .csv) containing mentored participant data.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
+                    </SheetDescription>
+                </SheetHeader>
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
                     <div className="flex flex-col items-center justify-center border-2 border-dashed border-muted-foreground/25 rounded-lg p-12 gap-2 hover:bg-muted/50 transition-colors cursor-pointer">
                         <FileUp className="h-8 w-8 text-muted-foreground" />
                         <p className="text-sm font-medium">Click or drop file here</p>
@@ -141,12 +136,12 @@ export default function ParticipantsPage() {
                         </ul>
                     </div>
                 </div>
-                <DialogFooter>
+                <SheetFooter className="border-t">
                     <Button variant="outline">Download Template</Button>
                     <Button type="submit" disabled>Start Import</Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+                </SheetFooter>
+            </SheetContent>
+        </Sheet>
     )
 
     const filters = (

@@ -12,27 +12,21 @@ import {
     TableRow
 } from "@/components/ui/table"
 import { Building2, MapPin, CheckCircle, Users, Loader2 } from "lucide-react"
-import { getMyUniversity } from "@/actions/university"
+import { useQuery } from "@tanstack/react-query"
 import Image from "next/image"
 import { getStorageUrl } from "@/lib/storage-helper"
 
 export default function UniversitasPage() {
-    const [university, setUniversity] = React.useState<any>(null)
-    const [loading, setLoading] = React.useState(true)
-
-    React.useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getMyUniversity()
-                setUniversity(data)
-            } finally {
-                setLoading(false)
-            }
+    const { data: university, isLoading } = useQuery({
+        queryKey: ["my-university"],
+        queryFn: async () => {
+            const res = await fetch("/api/universities?my=true")
+            if (!res.ok) throw new Error("Gagal mengambil data universitas")
+            return res.json()
         }
-        fetchData()
-    }, [])
+    })
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
@@ -61,11 +55,12 @@ export default function UniversitasPage() {
                     <CardHeader className="flex flex-row items-center gap-4 space-y-0">
                         <div className="h-14 w-14 rounded-lg bg-indigo-50 flex items-center justify-center border border-indigo-100 overflow-hidden relative">
                             {university.logoUrl ? (
-                                <Image 
-                                    src={getStorageUrl(university.logoUrl)} 
-                                    alt={university.name} 
-                                    fill 
-                                    className="object-contain p-2" 
+                                <Image
+                                    src={getStorageUrl(university.logoUrl)}
+                                    alt={university.name}
+                                    fill
+                                    unoptimized
+                                    className="object-contain p-2"
                                 />
                             ) : (
                                 <Building2 className="h-8 w-8 text-indigo-600" />
